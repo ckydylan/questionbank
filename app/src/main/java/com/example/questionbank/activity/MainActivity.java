@@ -9,7 +9,10 @@ import com.example.questionbank.fragment.HomeFragment;
 import com.example.questionbank.fragment.QuestionFragment;
 import com.example.questionbank.fragment.SettingFragment;
 import com.example.questionbank.utils.ImmersiveStatusBarSettings;
+import com.example.questionbank.utils.RegularUtil;
 import com.example.questionbank.view.BottomBar;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,5 +41,11 @@ public class MainActivity extends AppCompatActivity {
                         R.mipmap.setting_before,
                         R.mipmap.setting_after)
                 .build();
+
+        try {
+            RegularUtil.processQuestion(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

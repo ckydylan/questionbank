@@ -125,7 +125,7 @@
             android:layout_height="wrap_content"
             android:buttonTint="#4664E6"
             android:checked="true"
-            android:text="全部随机"
+            android:text="随机抽取"
             android:textSize="20dp" />
 
         <RadioButton
