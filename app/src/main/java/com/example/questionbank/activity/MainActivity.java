@@ -3,11 +3,14 @@ package com.example.questionbank.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.questionbank.R;
+import com.example.questionbank.db.QuestionDAO;
 import com.example.questionbank.fragment.HomeFragment;
 import com.example.questionbank.fragment.QuestionFragment;
 import com.example.questionbank.fragment.SettingFragment;
+import com.example.questionbank.utils.AssertUtil;
 import com.example.questionbank.utils.ImmersiveStatusBarSettings;
 import com.example.questionbank.utils.RegularUtil;
 import com.example.questionbank.view.BottomBar;
@@ -41,11 +44,14 @@ public class MainActivity extends AppCompatActivity {
                         R.mipmap.setting_before,
                         R.mipmap.setting_after)
                 .build();
-
-        try {
-            RegularUtil.processQuestion(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        AssertUtil.copyFile(this);
+//        if(new QuestionDAO(this).qureyQnum() < 2000){
+//            try {
+//                new QuestionDAO(this).addQuestion(RegularUtil.processQuestion(this));
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        Log.e(">>>", "initView: >>>>>"+new QuestionDAO(this).qureyQnum());
     }
 }
