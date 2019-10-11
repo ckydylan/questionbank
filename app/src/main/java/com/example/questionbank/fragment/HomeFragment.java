@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.questionbank.R;
+import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.activity.MainActivity;
 import com.example.questionbank.activity.QuestionRoundActivity;
 
@@ -36,6 +37,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn_do_question = view.findViewById(R.id.btn_do_question);//题库中开始做题
 
         tv_question_edit.setOnClickListener(this);
+        btn_do_question.setOnClickListener(this);
         tv_title.setText("首页");
     }
 
@@ -44,6 +46,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.tv_question_edit:
                 startActivity(new Intent(getContext(), QuestionRoundActivity.class));
+                break;
+            case R.id.btn_do_question:
+                startActivity(new Intent(getContext(), DoQuestionActivity.class));
                 break;
         }
     }

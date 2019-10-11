@@ -17,6 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.QuestionRoundActivity" android:launchMode="singleTop"/>
+        <activity android:name=".activity.DoQuestionActivity" android:launchMode="singleTop"/>
+        <activity android:name=".activity.AnswerSheetActivity" android:launchMode="singleTop"/>
     </application>
 
 </manifest>

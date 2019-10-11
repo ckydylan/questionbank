@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.example.questionbank.R;
+import com.example.questionbank.utils.ImmersiveStatusBarSettings;
 
 /**
  * @author cky
@@ -23,6 +24,7 @@ public class QuestionRoundActivity extends Activity {
     }
 
     private void initView(){
+        new ImmersiveStatusBarSettings().settingStatusBar(this);
         tv_title = findViewById(R.id.tv_title);
         tv_title.setText("题目范围");
     }

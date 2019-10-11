@@ -10,6 +10,20 @@ public class QuestionBean {
     String select_D;
     String answer;
 
+    public QuestionBean(){
+
+    }
+    public QuestionBean(int id, String question, String type, String select_A, String select_B, String select_C, String select_D, String answer) {
+        this.id = id;
+        this.question = question;
+        this.type = type;
+        this.select_A = select_A;
+        this.select_B = select_B;
+        this.select_C = select_C;
+        this.select_D = select_D;
+        this.answer = answer;
+    }
+
     public int getId() {
         return id;
     }
