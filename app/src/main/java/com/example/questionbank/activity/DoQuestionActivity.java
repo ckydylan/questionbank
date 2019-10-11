@@ -1,6 +1,7 @@
 package com.example.questionbank.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -50,6 +52,7 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
     QuestionAdapter questionAdapter;
     ImageView iv_right_or_wrong;
     TextView tv_question_num;
+    AnswerSheetAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +73,10 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         tv_title.setText("答题");
         iv_right.setImageResource(R.mipmap.question_right_menu);
         iv_back.setImageResource(R.mipmap.back);
-        iv_back.setOnClickListener(v -> this.finish());
+        iv_back.setOnClickListener(v -> {
+            alert();
+
+        });
         vp_question.setCurrentItem(0);
         questionAdapter = new QuestionAdapter(getSupportFragmentManager());
         vp_question.setAdapter(questionAdapter);
@@ -92,6 +98,14 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         });
     }
 
+    private void alert(){
+        AlertDialog.Builder builder  = new AlertDialog.Builder(DoQuestionActivity.this);
+        builder.setTitle("警告" ) ;
+        builder.setMessage("退出后将无法上传题目，是否要退出" ) ;
+        builder.setPositiveButton("是", (dialog, which) -> DoQuestionActivity.this.finish());
+        builder.setNegativeButton("否", null);
+        builder.show();
+    }
     /**
      * 初始化问题内容
      */
@@ -106,7 +120,7 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         questionBeanList = new ArrayList<>();
         question = "对坐标计算中关于“基点”、“节点”的概念下面哪种说法是错误的";
         type = "选择";
-        select_A = "逼近线段的交点称为节点";
+        select_A = "逼近线段的交点称为节点逼近线段的交点称为节点逼近线段的交点称为节称为节点逼近线段的交点称逼近线段的交点称为节点";
         select_B = "各相邻几何元素的交点或切点称为基点";
         select_C = "各相邻几何元素的交点或切点称为节点";
         select_D = "节点和基点是两个不同的概念";
@@ -139,6 +153,17 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         select_D = "";
         answer = "A";
         questionBeanList.add(new QuestionBean(4, question, type, select_A, select_B, select_C, select_D, answer));
+
+        for (int i = 0; i < 20; i++) {
+            question = "对坐标计算中关于“基点”、“节点”的概念下面哪种说法是错误的4";
+            type = "判断";
+            select_A = "T";
+            select_B = "F";
+            select_C = "";
+            select_D = "";
+            answer = "A";
+            questionBeanList.add(new QuestionBean(4, question, type, select_A, select_B, select_C, select_D, answer));
+        }
     }
 
 
@@ -172,9 +197,14 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         iv_right_or_wrong = layout.findViewById(R.id.iv_right_or_wrong);
         tv_question_num = layout.findViewById(R.id.tv_question_num);
 
-        GridLayoutManager manager = new GridLayoutManager(this,2);
+        GridLayoutManager manager = new GridLayoutManager(this, 8);
         rv_answer_sheet.setLayoutManager(manager);
-        rv_answer_sheet.setAdapter(new AnswerSheetAdapter());
+        adapter = new AnswerSheetAdapter();
+        adapter.setJumpViewpager(position -> {
+            vp_question.setCurrentItem(position);
+            popupWindow.dismiss();
+        });
+        rv_answer_sheet.setAdapter(adapter);
     }
 
 
@@ -187,5 +217,8 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        alert();
+    }
 }

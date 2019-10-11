@@ -33,12 +33,13 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     private QuestionBean questionBean;
     private Drawable drawable;
     private int index;
-    TextView tv_answer, tv_person_select;
+    TextView tv_answer, tv_person_select,tv_question_id;
     TextView tv_question_type, tv_question;
     RadioGroup rg_select;
     RadioButton rb_a, rb_b, rb_c, rb_d;
     ConstraintLayout cl_answer;
     Button btn_finish_question;
+
 
     public DoQuestionFragment(int index) {
         Log.d("index", index + "");
@@ -58,6 +59,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         tv_question_type = view.findViewById(R.id.tv_question_type);
         tv_question = view.findViewById(R.id.tv_question);
         rg_select = view.findViewById(R.id.rg_select);
+        tv_question_id = view.findViewById(R.id.tv_question_id);
         rb_a = view.findViewById(R.id.rb_a);
         rb_b = view.findViewById(R.id.rb_b);
         rb_c = view.findViewById(R.id.rb_c);
@@ -82,6 +84,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
      * 设置题目
      */
     private void setQuestion() {
+        tv_question_id.setText(index+1+"");
         if ("选择".equals(questionBean.getType())) {
             tv_question_type.setText(questionBean.getType());
             tv_question.setText(questionBean.getQuestion());

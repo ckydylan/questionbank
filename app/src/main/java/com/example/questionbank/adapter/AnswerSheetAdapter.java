@@ -17,6 +17,15 @@ import com.example.questionbank.activity.DoQuestionActivity;
  * date 2019-10-11
  */
 public class AnswerSheetAdapter extends RecyclerView.Adapter<AnswerSheetAdapter.ViewHolder> {
+    private JumpViewpager jumpViewpager;
+
+    public void setJumpViewpager(JumpViewpager jumpViewpager) {
+        this.jumpViewpager = jumpViewpager;
+    }
+
+    public interface JumpViewpager{
+        void jump(int position);
+    }
 
 
     @NonNull
@@ -32,6 +41,11 @@ public class AnswerSheetAdapter extends RecyclerView.Adapter<AnswerSheetAdapter.
         holder.tv_question_num.setText(position+1+"");
 
 
+        holder.itemView.setOnClickListener(v -> {
+            if (jumpViewpager != null){
+                jumpViewpager.jump(position);
+            }
+        });
     }
 
 
