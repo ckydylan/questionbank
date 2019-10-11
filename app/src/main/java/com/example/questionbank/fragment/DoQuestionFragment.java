@@ -23,7 +23,11 @@ import androidx.fragment.app.Fragment;
 import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.activity.MainActivity;
+import com.example.questionbank.bean.QuestionAnswerBean;
 import com.example.questionbank.bean.QuestionBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author cky
@@ -33,7 +37,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     private QuestionBean questionBean;
     private Drawable drawable;
     private int index;
-    TextView tv_answer, tv_person_select,tv_question_id;
+    TextView tv_answer, tv_person_select, tv_question_id;
     TextView tv_question_type, tv_question;
     RadioGroup rg_select;
     RadioButton rb_a, rb_b, rb_c, rb_d;
@@ -71,11 +75,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
 
         rg_select.setOnCheckedChangeListener(this);
 
-        //todo  最后一页显示已完成
-        if (index == DoQuestionActivity.questionBeanList.size()){
-            btn_finish_question.setVisibility(View.VISIBLE);
-        }
-
+        showLastButton();
         setRadioButtonBG();
         setQuestion();
     }
@@ -84,7 +84,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
      * 设置题目
      */
     private void setQuestion() {
-        tv_question_id.setText(index+1+"");
+        tv_question_id.setText(index + 1 +"/"+DoQuestionActivity.questionBeanList.size());
         if ("选择".equals(questionBean.getType())) {
             tv_question_type.setText(questionBean.getType());
             tv_question.setText(questionBean.getQuestion());
@@ -137,12 +137,14 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             String answer = "A";
             tv_answer.setText(answer);
             tv_person_select.setText(personSelect);
+
             //答案不正确
             if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
                 tv_person_select.setTextColor(Color.RED);
-
+                DoQuestionActivity.questionAnswerBeanList.get(index).setAnswerStatus(0);
             } else {
                 //答案正确
+                DoQuestionActivity.questionAnswerBeanList.get(index).setAnswerStatus(1);
                 tv_person_select.setTextColor(Color.parseColor("#4664E6"));
             }
         }
@@ -158,19 +160,12 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         rb_d.setClickable(false);
     }
 
-    /**
-     * 下一题清除选中
-     */
-    private void clearSelect() {
-        rb_a.setClickable(true);
-        rb_b.setClickable(true);
-        rb_c.setClickable(true);
-        rb_d.setClickable(true);
-
-        rb_a.setChecked(false);
-        rb_b.setChecked(false);
-        rb_c.setChecked(false);
-        rb_d.setChecked(false);
+    private void showLastButton() {
+        if (index == DoQuestionActivity.questionBeanList.size() - 1) {
+            btn_finish_question.setVisibility(View.VISIBLE);
+            btn_finish_question.setOnClickListener(v -> {
+            });
+        }
     }
 
 //        @Override
@@ -217,5 +212,11 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             setClickableFalse();
         }
         showAnswer(checkedId, personSelect);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 }

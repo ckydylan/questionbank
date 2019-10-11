@@ -1,5 +1,6 @@
 package com.example.questionbank.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
+import com.example.questionbank.bean.QuestionAnswerBean;
+import com.example.questionbank.fragment.DoQuestionFragment;
+
+import java.util.List;
 
 /**
  * @author cky
@@ -18,6 +23,7 @@ import com.example.questionbank.activity.DoQuestionActivity;
  */
 public class AnswerSheetAdapter extends RecyclerView.Adapter<AnswerSheetAdapter.ViewHolder> {
     private JumpViewpager jumpViewpager;
+    List<QuestionAnswerBean> questionAnswerBeanList;
 
     public void setJumpViewpager(JumpViewpager jumpViewpager) {
         this.jumpViewpager = jumpViewpager;
@@ -39,7 +45,15 @@ public class AnswerSheetAdapter extends RecyclerView.Adapter<AnswerSheetAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_question_num.setText(position+1+"");
+        holder.tv_question_num.setTextColor(Color.parseColor("#000000"));
+        questionAnswerBeanList = DoQuestionActivity.questionAnswerBeanList;
+        QuestionAnswerBean questionAnswerBean = questionAnswerBeanList.get(position);
 
+        if (questionAnswerBean.getAnswerStatus() == 0){
+            holder.iv_right_or_wrong.setImageResource(R.mipmap.circle_wrong);
+        }else if (questionAnswerBean.getAnswerStatus() == 1){
+            holder.iv_right_or_wrong.setImageResource(R.mipmap.circle_write);
+        }
 
         holder.itemView.setOnClickListener(v -> {
             if (jumpViewpager != null){

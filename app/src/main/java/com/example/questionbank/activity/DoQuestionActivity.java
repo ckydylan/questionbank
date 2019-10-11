@@ -31,6 +31,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.questionbank.R;
 import com.example.questionbank.adapter.AnswerSheetAdapter;
 import com.example.questionbank.adapter.QuestionAdapter;
+import com.example.questionbank.bean.QuestionAnswerBean;
 import com.example.questionbank.bean.QuestionBean;
 import com.example.questionbank.utils.ImmersiveStatusBarSettings;
 
@@ -53,6 +54,9 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
     ImageView iv_right_or_wrong;
     TextView tv_question_num;
     AnswerSheetAdapter adapter;
+
+    public static List<QuestionAnswerBean> questionAnswerBeanList;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -164,14 +168,17 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
             answer = "A";
             questionBeanList.add(new QuestionBean(4, question, type, select_A, select_B, select_C, select_D, answer));
         }
+
+        questionAnswerBeanList = new ArrayList<>();
+        for (int i = 0; i < questionBeanList.size(); i++) {
+            questionAnswerBeanList.add(new QuestionAnswerBean(i,2));
+        }
     }
 
 
     /**
      *      * 创建popupWindow
-     * <p>
-     *      *popupWindow 是全局定义的，根据自己需要惊醒定义
-     *      * @param view View 比如：btn_ok的点击后触发popupWindow，则view就是id为btn_ok对应的view
+     *      * @param view View
      *      
      */
     private void bottomwindow(View view) {
