@@ -67,6 +67,26 @@ public class QuestionDAO {
         return id;
     }
 
+    public void updateQuestion(QuestionBean questionBean){
+        SQLiteOpenHelper helper = new DatabaseHelper(context);
+        SQLiteDatabase database = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        //在values中添加内容
+        values.put("testtime",questionBean.getTesttime());
+        values.put("wrongtime",questionBean.getWrongtime());
+        values.put("righttime",questionBean.getRighttime());
+        values.put("lastwrong",questionBean.getLastwrong());
+        //修改条件
+        String whereClause = "_id = ?";
+        //修改添加参数
+        String[] whereArgs={String.valueOf(questionBean.getId())};
+        //修改
+        //int x =
+        database.update("tb_question",values,whereClause,whereArgs);
+        database.close();
+        return ;
+    }
+
     public List<QuestionBean> qureyQuestion(int[] qnums){
         SQLiteOpenHelper helper = new DatabaseHelper(context);
         SQLiteDatabase database = helper.getReadableDatabase();
@@ -87,6 +107,9 @@ public class QuestionDAO {
 
         List<QuestionBean> questionBeans = new ArrayList<>();
         cursor.moveToFirst();
+        if(cursor.getCount() == 0){
+            return questionBeans;
+        }
 
         do{
             int id = cursor.getInt(cursor.getColumnIndex("_id"));
@@ -121,10 +144,10 @@ public class QuestionDAO {
             questionBeans.add(qb);
         }while (cursor.moveToNext());
         cursor.close();
-
-        for(QuestionBean qb : questionBeans){
-            LogUtil.loge(">>>qureyQuestion>>>",qb.toString());
-        }
+//
+//        for(QuestionBean qb : questionBeans){
+//            LogUtil.loge(">>>qureyQuestion>>>",qb.toString());
+//        }
         return questionBeans;
     }
 
