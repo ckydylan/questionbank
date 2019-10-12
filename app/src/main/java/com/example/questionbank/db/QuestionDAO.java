@@ -10,8 +10,11 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.example.questionbank.bean.QuestionBean;
+import com.example.questionbank.utils.LogUtil;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class QuestionDAO {
     private Context context;
@@ -51,7 +54,7 @@ public class QuestionDAO {
 
     public int qureyQnum(){
         SQLiteOpenHelper helper = new DatabaseHelper(context);
-        SQLiteDatabase database = helper.getWritableDatabase();
+        SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor = database.query("tb_question",new String[]{"_id"},null,null,null,null,"_id DESC");
         cursor.moveToFirst();
         int id = 0;
@@ -60,7 +63,59 @@ public class QuestionDAO {
         }catch (CursorIndexOutOfBoundsException e){
             Log.e("SQLite", "first create table" );
         }
+        database.close();
         return id;
+    }
+
+    public void qureyQuestion(int[] qnums){
+        SQLiteOpenHelper helper = new DatabaseHelper(context);
+        SQLiteDatabase database = helper.getReadableDatabase();
+
+//        for(int i : ){
+//
+//        }
+        StringBuilder sb = new StringBuilder("_id in (");
+        for(int i : qnums){
+
+        }
+        Cursor cursor = database.query("tb_question",new String[]{"_id","question","type","select_A","select_B","select_C","select_D","answer"}
+        ,"_id = ?", null,null,null,null);
+
+        List<QuestionBean> questionBeans = new ArrayList<>(qnums.length);
+        cursor.moveToFirst();
+        while(cursor != null){
+            int id = cursor.getInt(0);
+            String question = cursor.getString(1);
+            String type = cursor.getString(2);
+            String a_choice = cursor.getString(3);
+            String b_choice = cursor.getString(4);
+            String c_choice = cursor.getString(5);
+            String d_choice = cursor.getString(6);
+            String answer = cursor.getString(7);
+            cursor.moveToNext();
+            QuestionBean qb = new QuestionBean();
+            qb.setId(id);
+            qb.setQuestion(question);
+            qb.setType(type);
+            qb.setSelect_A(a_choice);
+            qb.setSelect_B(b_choice);
+            qb.setSelect_C(c_choice);
+            qb.setSelect_D(d_choice);
+            qb.setAnswer(answer);
+            questionBeans.add(qb);
+        }
+        for(QuestionBean qb : questionBeans){
+            LogUtil.loge(">>>>>>",qb.toString());
+        }
+//
+//        int id = 0;
+//        try{
+//            id = cursor.getInt(0);
+//        }catch (CursorIndexOutOfBoundsException e){
+//            Log.e("SQLite", "first create table" );
+//        }
+
+        return;
     }
 
 

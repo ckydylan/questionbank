@@ -9,6 +9,12 @@ public class QuestionBean {
     String select_C;
     String select_D;
     String answer;
+    String qClass;
+    int testtime;
+    int wrongtime;
+    int righttime;
+    String hardlevel;
+
 
     public QuestionBean(){
 
@@ -86,5 +92,64 @@ public class QuestionBean {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getqClass() {
+        return qClass;
+    }
+
+    public void setqClass(String qClass) {
+        this.qClass = qClass;
+    }
+
+    public int getTesttime() {
+        return testtime;
+    }
+
+    public void setTesttime(int testtime) {
+        this.testtime = testtime;
+    }
+
+    public int getWrongtime() {
+        return wrongtime;
+    }
+
+    public void setWrongtime(int wrongtime) {
+        this.wrongtime = wrongtime;
+    }
+
+    public int getRighttime() {
+        return righttime;
+    }
+
+    public void setRighttime(int righttime) {
+        this.righttime = righttime;
+    }
+
+    public String getHardlevel() {
+        return hardlevel;
+    }
+
+    public void setHardlevel(String hardlevel) {
+        this.hardlevel = hardlevel;
+    }
+
+    @Override
+    public String toString() {
+        return "QuestionBean{" +
+                "id=" + id +
+                ", question='" + question + '\'' +
+                ", type='" + type + '\'' +
+                ", select_A='" + select_A + '\'' +
+                ", select_B='" + select_B + '\'' +
+                ", select_C='" + select_C + '\'' +
+                ", select_D='" + select_D + '\'' +
+                ", answer='" + answer + '\'' +
+                ", qClass='" + qClass + '\'' +
+                ", testtime=" + testtime +
+                ", wrongtime=" + wrongtime +
+                ", righttime=" + righttime +
+                ", hardlevel='" + hardlevel + '\'' +
+                '}';
     }
 }
