@@ -1,6 +1,7 @@
 package com.example.questionbank.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -16,7 +17,7 @@ public class AssertUtil {
 
     public static void copyFile(Context context){
         File file = new File(DB_URL);
-        if(file.exists()){
+        if(file.length() > 1000){
             return;
         }
         try {

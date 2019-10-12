@@ -18,14 +18,15 @@ import java.util.List;
 
 public class QuestionDAO {
     private Context context;
+    private SQLiteDatabase database;
 
     public QuestionDAO(Context context) {
         this.context = context;
+        SQLiteOpenHelper helper = new DatabaseHelper(context);
+        database = helper.getWritableDatabase();
     }
 
     public void addQuestion(ArrayList<QuestionBean> list){
-            SQLiteOpenHelper helper = new DatabaseHelper(context);
-            SQLiteDatabase database = helper.getWritableDatabase();
 
             String sql = "insert into tb_question(question,type,select_A,select_B,select_C,select_D,answer) values(?,?,?,?,?,?,?)";
             SQLiteStatement stat = database.compileStatement(sql);
@@ -53,8 +54,8 @@ public class QuestionDAO {
     }
 
     public int qureyQnum(){
-        SQLiteOpenHelper helper = new DatabaseHelper(context);
-        SQLiteDatabase database = helper.getReadableDatabase();
+        //SQLiteOpenHelper helper = new DatabaseHelper(context);
+        //SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor = database.query("tb_question",new String[]{"_id"},null,null,null,null,"_id DESC");
         cursor.moveToFirst();
         int id = 0;
@@ -63,13 +64,13 @@ public class QuestionDAO {
         }catch (CursorIndexOutOfBoundsException e){
             Log.e("SQLite", "first create table" );
         }
-        database.close();
+        //database.close();
         return id;
     }
 
     public void updateQuestion(QuestionBean questionBean){
-        SQLiteOpenHelper helper = new DatabaseHelper(context);
-        SQLiteDatabase database = helper.getWritableDatabase();
+        //SQLiteOpenHelper helper = new DatabaseHelper(context);
+        //SQLiteDatabase database = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         //在values中添加内容
         values.put("testtime",questionBean.getTesttime());
@@ -83,13 +84,13 @@ public class QuestionDAO {
         //修改
         //int x =
         database.update("tb_question",values,whereClause,whereArgs);
-        database.close();
+        //database.close();
         return ;
     }
 
     public List<QuestionBean> qureyQuestion(int[] qnums){
-        SQLiteOpenHelper helper = new DatabaseHelper(context);
-        SQLiteDatabase database = helper.getReadableDatabase();
+        //SQLiteOpenHelper helper = new DatabaseHelper(context);
+        //SQLiteDatabase database = helper.getReadableDatabase();
 
         String[] qnum_str = new String[qnums.length];
         StringBuilder sb = new StringBuilder("_id in (");
