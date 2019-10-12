@@ -11,7 +11,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.questionbank.R;
-import com.example.questionbank.bean.QuestionAnswerBean;
 import com.example.questionbank.bean.QuestionBean;
 import com.example.questionbank.utils.ItemSlideHelper;
 

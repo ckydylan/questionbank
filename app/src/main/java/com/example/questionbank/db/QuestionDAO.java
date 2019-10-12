@@ -85,7 +85,7 @@ public class QuestionDAO {
         Cursor cursor = database.query("tb_question",null
         ,sb.toString(), qnum_str,null,null,null);
 
-        List<QuestionBean> questionBeans = new ArrayList<>(qnums.length);
+        List<QuestionBean> questionBeans = new ArrayList<>();
         cursor.moveToFirst();
 
         do{
@@ -117,6 +117,7 @@ public class QuestionDAO {
             qb.setWrongtime(wrongtime);
             qb.setRighttime(righttime);
             qb.setHardlevel(hardlevel);
+            qb.setAnswerStatus(2);
             questionBeans.add(qb);
         }while (cursor.moveToNext());
         cursor.close();

@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
-import com.example.questionbank.bean.QuestionAnswerBean;
-import com.example.questionbank.fragment.DoQuestionFragment;
-
-import java.util.List;
+import com.example.questionbank.bean.QuestionBean;
 
 /**
  * @author cky
@@ -23,7 +20,6 @@ import java.util.List;
  */
 public class AnswerSheetAdapter extends RecyclerView.Adapter<AnswerSheetAdapter.ViewHolder> {
     private JumpViewpager jumpViewpager;
-    List<QuestionAnswerBean> questionAnswerBeanList;
 
     public void setJumpViewpager(JumpViewpager jumpViewpager) {
         this.jumpViewpager = jumpViewpager;
@@ -46,12 +42,13 @@ public class AnswerSheetAdapter extends RecyclerView.Adapter<AnswerSheetAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_question_num.setText(position+1+"");
         holder.tv_question_num.setTextColor(Color.parseColor("#000000"));
-        questionAnswerBeanList = DoQuestionActivity.questionAnswerBeanList;
-        QuestionAnswerBean questionAnswerBean = questionAnswerBeanList.get(position);
+        QuestionBean questionBean = DoQuestionActivity.questionBeanList.get(position);
 
-        if (questionAnswerBean.getAnswerStatus() == 0){
+        holder.iv_right_or_wrong.setImageResource(R.mipmap.circle_normal);
+
+        if (questionBean.getAnswerStatus() == 0){
             holder.iv_right_or_wrong.setImageResource(R.mipmap.circle_wrong);
-        }else if (questionAnswerBean.getAnswerStatus() == 1){
+        }else if (questionBean.getAnswerStatus() == 1){
             holder.iv_right_or_wrong.setImageResource(R.mipmap.circle_write);
         }
 

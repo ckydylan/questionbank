@@ -78,14 +78,14 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
      */
     private void setQuestion() {
         tv_question_id.setText(index + 1 +"/"+DoQuestionActivity.questionBeanList.size());
-        if ("选择".equals(questionBean.getType())) {
+        if ("choice".equals(questionBean.getType())) {
             tv_question_type.setText(questionBean.getType());
             tv_question.setText(questionBean.getQuestion());
             rb_a.setText(questionBean.getSelect_A());
             rb_b.setText(questionBean.getSelect_B());
             rb_c.setText(questionBean.getSelect_C());
             rb_d.setText(questionBean.getSelect_D());
-        } else if ("判断".equals(questionBean.getType())) {
+        } else if ("judge".equals(questionBean.getType())) {
             tv_question_type.setText(questionBean.getType());
             tv_question.setText(questionBean.getQuestion());
             rb_a.setText(questionBean.getSelect_A());
@@ -126,18 +126,17 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     private void showAnswer(int checkedId, String personSelect) {
         if (checkedId != 0) {
             cl_answer.setVisibility(View.VISIBLE);
-            //todo 从数据库中拿取答案删
-            String answer = "A";
+            String answer = questionBean.getAnswer();
             tv_answer.setText(answer);
             tv_person_select.setText(personSelect);
 
             //答案不正确
             if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
                 tv_person_select.setTextColor(Color.RED);
-                DoQuestionActivity.questionAnswerBeanList.get(index).setAnswerStatus(0);
+                DoQuestionActivity.questionBeanList.get(index).setAnswerStatus(0);
             } else {
                 //答案正确
-                DoQuestionActivity.questionAnswerBeanList.get(index).setAnswerStatus(1);
+                DoQuestionActivity.questionBeanList.get(index).setAnswerStatus(1);
                 tv_person_select.setTextColor(Color.parseColor("#4664E6"));
             }
         }
@@ -160,29 +159,6 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             });
         }
     }
-
-//        @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.btn_last_question:
-//                flag--;
-//                if (flag < 0) {
-//                    Toast.makeText(this, "已经是第一题", Toast.LENGTH_SHORT).show();
-//                    flag = 0;
-//                }
-//                setQuestion(flag);
-//                break;
-//            case R.id.btn_next_question:
-//                flag++;
-//                if (flag > 3) {
-//                    Toast.makeText(this, "已经是最后一题", Toast.LENGTH_SHORT).show();
-//                    flag = 3;
-//                }
-//                clearSelect();
-//                setQuestion(flag);
-//                break;
-//        }
-//    }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {

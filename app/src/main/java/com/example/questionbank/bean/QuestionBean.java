@@ -16,6 +16,8 @@ public class QuestionBean implements Serializable {
     int wrongtime;
     int righttime;
     String hardlevel;
+    int answerStatus;
+
 
 
     public QuestionBean(){
@@ -134,6 +136,14 @@ public class QuestionBean implements Serializable {
 
     public void setHardlevel(String hardlevel) {
         this.hardlevel = hardlevel;
+    }
+
+    public int getAnswerStatus() {
+        return answerStatus;
+    }
+
+    public void setAnswerStatus(int answerStatus) {
+        this.answerStatus = answerStatus;
     }
 
     @Override
