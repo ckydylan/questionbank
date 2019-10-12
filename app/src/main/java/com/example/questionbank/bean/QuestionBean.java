@@ -1,6 +1,8 @@
 package com.example.questionbank.bean;
 
-public class QuestionBean {
+import java.io.Serializable;
+
+public class QuestionBean implements Serializable {
     int id;
     String question;
     String type;
