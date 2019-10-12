@@ -6,16 +6,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 题库题号索引生成器
+ */
 public class RollOutUtil {
     public static final String  ALL_RANDOM = "allRandom";
     public static final String JUST_WRONG = "justWrong";
     public static final String NO_EZ = "noEasy";
     //String JUST_NEW = "new";
-    public static void rollOut(String type,int cNum,int jNUm){
+    public static int[] rollOut(String type,int cNum,int jNUm){
         switch (type){
             case ALL_RANDOM:
-                allRandom(cNum,jNUm);
-                break;
+                return allRandom(cNum,jNUm);
             case JUST_WRONG:
 
                 break;
@@ -23,6 +25,7 @@ public class RollOutUtil {
 
                 break;
         }
+        return null;
     }
 
     private static int[]  allRandom(int cNum,int jNum){
