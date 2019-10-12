@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="wrong_question_sort">
+        <item>默认排序(根据ID)</item>
+        <item>根据错题次数排序</item>
+    </string-array>
+
+
+</resources>
