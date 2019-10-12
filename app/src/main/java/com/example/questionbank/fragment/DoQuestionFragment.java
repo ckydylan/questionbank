@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.bean.QuestionBean;
+import com.example.questionbank.db.QuestionDAO;
 
 import java.util.List;
 
@@ -141,6 +142,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             tv_answer.setText(answer);
             tv_person_select.setText(personSelect);
 
+            //todo:cky
             //答案不正确
             if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
                 tv_person_select.setTextColor(Color.RED);
@@ -154,7 +156,6 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 //答案正确
                 questionBeanList.get(index).setAnswerStatus(1);
                 tv_person_select.setTextColor(Color.parseColor("#4664E6"));
-
                 int historyTimes = questionBeanList.get(index).getRighttime();
                 questionBeanList.get(index).setRighttime(historyTimes + 1);
             }
@@ -186,6 +187,11 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 if (!isFinish) {
                     Toast.makeText(getContext(), "没做完", Toast.LENGTH_SHORT).show();
                 } else {
+                    for (QuestionBean question : questionBeanList) {
+                        Log.d("question",question.toString());
+                        new QuestionDAO(getActivity()).updateQuestion(question);
+
+                    }
 //                    if (getActivity() != null)
 //                        getActivity().finish();
                     //todo:zp
