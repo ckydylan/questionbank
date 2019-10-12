@@ -14,12 +14,19 @@ import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.bean.QuestionBean;
 
+import java.util.List;
+
 /**
  * @author cky
  * date 2019-10-11
  */
 public class AnswerSheetAdapter extends RecyclerView.Adapter<AnswerSheetAdapter.ViewHolder> {
     private JumpViewpager jumpViewpager;
+    List<QuestionBean> questionBeanList;
+
+    public AnswerSheetAdapter(List<QuestionBean> questionBeanList) {
+        this.questionBeanList = questionBeanList;
+    }
 
     public void setJumpViewpager(JumpViewpager jumpViewpager) {
         this.jumpViewpager = jumpViewpager;
@@ -42,7 +49,7 @@ public class AnswerSheetAdapter extends RecyclerView.Adapter<AnswerSheetAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_question_num.setText(position+1+"");
         holder.tv_question_num.setTextColor(Color.parseColor("#000000"));
-        QuestionBean questionBean = DoQuestionActivity.questionBeanList.get(position);
+        QuestionBean questionBean = questionBeanList.get(position);
 
         holder.iv_right_or_wrong.setImageResource(R.mipmap.circle_normal);
 
@@ -62,7 +69,7 @@ public class AnswerSheetAdapter extends RecyclerView.Adapter<AnswerSheetAdapter.
 
     @Override
     public int getItemCount() {
-        return DoQuestionActivity.questionBeanList.size();
+        return questionBeanList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{

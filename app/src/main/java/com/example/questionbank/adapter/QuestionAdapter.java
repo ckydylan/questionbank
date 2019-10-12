@@ -8,18 +8,22 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.questionbank.activity.DoQuestionActivity;
+import com.example.questionbank.bean.QuestionBean;
 import com.example.questionbank.fragment.DoQuestionFragment;
+
+import java.util.List;
 
 /**
  * @author cky
  * date 2019-10-11
  */
 public class QuestionAdapter extends FragmentStatePagerAdapter {
+    List<QuestionBean> questionBeanList;
 
-    public QuestionAdapter(@NonNull FragmentManager fm) {
+    public QuestionAdapter(@NonNull FragmentManager fm, List<QuestionBean> questionBeanList) {
         super(fm);
+        this.questionBeanList = questionBeanList;
     }
-
 
     @NonNull
     @Override
@@ -30,6 +34,6 @@ public class QuestionAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return DoQuestionActivity.questionBeanList.size();
+        return questionBeanList.size();
     }
 }

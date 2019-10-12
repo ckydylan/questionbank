@@ -116,6 +116,7 @@
         android:textSize="20dp" />
 
     <RadioGroup
+        android:id="@+id/rg_question_distribution"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"

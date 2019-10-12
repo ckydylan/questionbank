@@ -22,6 +22,8 @@ import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.bean.QuestionBean;
 
+import java.util.List;
+
 /**
  * @author cky
  * date 2019-10-11
@@ -30,6 +32,8 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     private QuestionBean questionBean;
     private Drawable drawable;
     private int index;
+    private List<QuestionBean> questionBeanList;
+    private boolean isFinish = false;
     TextView tv_answer, tv_person_select, tv_question_id;
     TextView tv_question_type, tv_question;
     RadioGroup rg_select;
@@ -41,15 +45,22 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     public DoQuestionFragment(int index) {
         Log.d("index", index + "");
         this.index = index;
-        questionBean = DoQuestionActivity.questionBeanList.get(index);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_do_question, container, false);
-        initView(view);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        questionBeanList = ((DoQuestionActivity) getActivity()).getQuestionBeanList();
+        questionBean = ((DoQuestionActivity) getActivity()).getQuestionBeanList().get(index);
+        initView(view);
     }
 
     private void initView(View view) {
@@ -77,19 +88,19 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
      * 设置题目
      */
     private void setQuestion() {
-        tv_question_id.setText(index + 1 +"/"+DoQuestionActivity.questionBeanList.size());
+        tv_question_id.setText(index + 1 + "/" + questionBeanList.size());
         if ("choice".equals(questionBean.getType())) {
-            tv_question_type.setText(questionBean.getType());
+            tv_question_type.setText("选择");
             tv_question.setText(questionBean.getQuestion());
             rb_a.setText(questionBean.getSelect_A());
             rb_b.setText(questionBean.getSelect_B());
             rb_c.setText(questionBean.getSelect_C());
             rb_d.setText(questionBean.getSelect_D());
         } else if ("judge".equals(questionBean.getType())) {
-            tv_question_type.setText(questionBean.getType());
+            tv_question_type.setText("判断");
             tv_question.setText(questionBean.getQuestion());
-            rb_a.setText(questionBean.getSelect_A());
-            rb_b.setText(questionBean.getSelect_B());
+            rb_a.setText("T");
+            rb_b.setText("F");
             rb_c.setVisibility(View.INVISIBLE);
             rb_d.setVisibility(View.INVISIBLE);
         }
@@ -133,11 +144,19 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             //答案不正确
             if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
                 tv_person_select.setTextColor(Color.RED);
-                DoQuestionActivity.questionBeanList.get(index).setAnswerStatus(0);
+                questionBeanList.get(index).setAnswerStatus(0);
+                Log.d("getWrongtime", questionBeanList.get(index).getWrongtime() + "");
+                int historyTimes = questionBeanList.get(index).getWrongtime();
+                questionBeanList.get(index).setWrongtime(historyTimes + 1);
+                Log.d("getWrongtime", questionBeanList.get(index).getWrongtime() + "");
+
             } else {
                 //答案正确
-                DoQuestionActivity.questionBeanList.get(index).setAnswerStatus(1);
+                questionBeanList.get(index).setAnswerStatus(1);
                 tv_person_select.setTextColor(Color.parseColor("#4664E6"));
+
+                int historyTimes = questionBeanList.get(index).getRighttime();
+                questionBeanList.get(index).setRighttime(historyTimes + 1);
             }
         }
     }
@@ -153,9 +172,25 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     }
 
     private void showLastButton() {
-        if (index == DoQuestionActivity.questionBeanList.size() - 1) {
+        if (index == questionBeanList.size() - 1) {
             btn_finish_question.setVisibility(View.VISIBLE);
             btn_finish_question.setOnClickListener(v -> {
+                for (QuestionBean question : questionBeanList) {
+                    if (question.getAnswerStatus() != 2) {
+                        isFinish = true;
+                    } else {
+                        isFinish = false;
+                        break;
+                    }
+                }
+                if (!isFinish) {
+                    Toast.makeText(getContext(), "没做完", Toast.LENGTH_SHORT).show();
+                } else {
+//                    if (getActivity() != null)
+//                        getActivity().finish();
+                    //todo:zp
+
+                }
             });
         }
     }
@@ -164,19 +199,24 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
         String personSelect = null;
-        if (rb_a.getId() == checkedId) {
-            personSelect = "A";
-            Toast.makeText(getContext(), rb_a.getText().toString(), Toast.LENGTH_SHORT).show();
-        } else if (rb_b.getId() == checkedId) {
-            personSelect = "B";
-            Toast.makeText(getContext(), rb_b.getText().toString(), Toast.LENGTH_SHORT).show();
-        } else if (rb_c.getId() == checkedId) {
-            personSelect = "C";
-            Toast.makeText(getContext(), rb_c.getText().toString(), Toast.LENGTH_SHORT).show();
-        } else if (rb_d.getId() == checkedId) {
-            personSelect = "D";
-            Toast.makeText(getContext(), rb_d.getText().toString(), Toast.LENGTH_SHORT).show();
+        if ("choice".equals(questionBeanList.get(index).getType())) {
+            if (rb_a.getId() == checkedId) {
+                personSelect = "A";
+            } else if (rb_b.getId() == checkedId) {
+                personSelect = "B";
+            } else if (rb_c.getId() == checkedId) {
+                personSelect = "C";
+            } else if (rb_d.getId() == checkedId) {
+                personSelect = "D";
+            }
+        } else if ("judge".equals(questionBeanList.get(index).getType())) {
+            if (rb_a.getId() == checkedId) {
+                personSelect = "T";
+            } else if (rb_b.getId() == checkedId) {
+                personSelect = "F";
+            }
         }
+
         if (checkedId != 0) {
             setClickableFalse();
         }

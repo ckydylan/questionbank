@@ -1,5 +1,6 @@
 package com.example.questionbank.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -33,7 +34,15 @@ import java.util.List;
  * 做题目
  */
 public class DoQuestionActivity extends FragmentActivity implements View.OnClickListener {
-    public static List<QuestionBean> questionBeanList;
+    String judge_choice_num = "";
+    String multiple_choice_num = "";
+    String question_distribution = "";
+    private List<QuestionBean> questionBeanList;
+
+    public List<QuestionBean> getQuestionBeanList() {
+        return questionBeanList;
+    }
+
     private PopupWindow popupWindow;
     TextView tv_title;
     ImageView iv_back, iv_right;
@@ -69,7 +78,7 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
 
         });
         vp_question.setCurrentItem(0);
-        questionAdapter = new QuestionAdapter(getSupportFragmentManager());
+        questionAdapter = new QuestionAdapter(getSupportFragmentManager(),questionBeanList);
         vp_question.setAdapter(questionAdapter);
         vp_question.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -87,6 +96,7 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
 
             }
         });
+
     }
 
     private void alert(){
@@ -101,8 +111,13 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
      * 初始化问题内容
      */
     private void initQuestion() {
+        Intent intent = getIntent();
+        question_distribution = intent.getStringExtra("question_distribution");
+        multiple_choice_num = intent.getStringExtra("multiple_choice_num");
+        judge_choice_num = intent.getStringExtra("judge_choice_num");
+
         QuestionDAO questionDAO = new QuestionDAO(this);
-        questionBeanList = questionDAO.qureyQuestion(RollOutUtil.rollOut(RollOutUtil.ALL_RANDOM,100,100));
+        questionBeanList = questionDAO.qureyQuestion(RollOutUtil.rollOut(RollOutUtil.ALL_RANDOM,Integer.parseInt(multiple_choice_num),Integer.parseInt(judge_choice_num)));
     }
 
 
@@ -124,11 +139,6 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         int[] location = new int[2];
         view.getLocationOnScreen(location);
         popupWindow.showAtLocation(view, Gravity.LEFT | Gravity.BOTTOM, 0, -location[1]);
-        //添加按键事件监听
-//        setButtonListeners(layout);
-        //添加pop窗口关闭事件，主要是实现关闭时改变背景的透明度
-//        popupWindow.setOnDismissListener(new poponDismissListener());
-//        backgroundAlpha(1f);
 
         rv_answer_sheet = layout.findViewById(R.id.rv_answer_sheet);
         iv_right_or_wrong = layout.findViewById(R.id.iv_right_or_wrong);
@@ -137,7 +147,7 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         view_quit.setOnClickListener(this);
         GridLayoutManager manager = new GridLayoutManager(this, 8);
         rv_answer_sheet.setLayoutManager(manager);
-        adapter = new AnswerSheetAdapter();
+        adapter = new AnswerSheetAdapter(questionBeanList);
         adapter.setJumpViewpager(position -> {
             vp_question.setCurrentItem(position);
             popupWindow.dismiss();
