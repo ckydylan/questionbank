@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -22,12 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
-import com.example.questionbank.activity.MainActivity;
-import com.example.questionbank.bean.QuestionAnswerBean;
 import com.example.questionbank.bean.QuestionBean;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author cky
