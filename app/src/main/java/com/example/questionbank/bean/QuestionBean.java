@@ -16,6 +16,7 @@ public class QuestionBean implements Serializable {
     int wrongtime;
     int righttime;
     String hardlevel;
+    String lastwrong;//“true” or “false” or “undone”
     int answerStatus;
 
 
@@ -144,6 +145,14 @@ public class QuestionBean implements Serializable {
 
     public void setAnswerStatus(int answerStatus) {
         this.answerStatus = answerStatus;
+    }
+
+    public String getLastwrong() {
+        return lastwrong;
+    }
+
+    public void setLastwrong(String lastwrong) {
+        this.lastwrong = lastwrong;
     }
 
     @Override
