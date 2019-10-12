@@ -3,78 +3,79 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E9E7E7"
-    >
+    android:background="#E9E7E7">
 
     <include
         android:id="@+id/include"
         layout="@layout/title_bar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
         <androidx.cardview.widget.CardView
+            android:id="@+id/cv_wrong_question_collection"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            app:cardCornerRadius="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:background="@color/white"
-            android:focusable="true"
             android:clickable="true"
+            android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            >
+            app:cardCornerRadius="10dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我的错题"
-                android:textSize="30dp"
                 android:layout_gravity="center"
-                />
+                android:text="我的错题"
+                android:textSize="30dp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cv_proficiency_question"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            app:cardCornerRadius="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:background="#ffffff"
-            android:focusable="true"
             android:clickable="true"
+            android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            >
+            app:cardCornerRadius="10dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="熟练题"
-                android:textSize="30dp"
-                android:layout_gravity="center"
-                />
+                android:textSize="30dp" />
         </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
+            android:id="@+id/cv_data_statistics"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            app:cardCornerRadius="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:background="#ffffff"
-            android:focusable="true"
             android:clickable="true"
+            android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            >
+            app:cardCornerRadius="10dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="数据统计"
-                android:textSize="30dp"
                 android:layout_gravity="center"
-                />
+                android:text="数据统计"
+                android:textSize="30dp" />
         </androidx.cardview.widget.CardView>
 
 
