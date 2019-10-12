@@ -22,7 +22,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "select_B varchar(50),\n" +
                 "select_C varchar(50),\n" +
                 "select_D varchar(50),\n" +
-                "answer varchar(10))";
+                "answer varchar(10),\n"+
+                "q_class varchar(10),\n"+
+                "testtime INTEGER,\n"+
+                "wrongtime INTEGER,\n"+
+                "righttime INTEGER,\n"+
+                "hardlevel varchar(10),\n"+
+                "lastwrong varchar(10))";
         db.execSQL(sql);
     }
 

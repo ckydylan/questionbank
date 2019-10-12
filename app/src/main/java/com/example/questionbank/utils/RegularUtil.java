@@ -24,7 +24,7 @@ public class RegularUtil {
     public static final String REGEX_SELECT_A = "A\\..*?\\s?(?=B\\.)";
     public static final String REGEX_SELECT_B = "B\\..*?\\s?(?=C\\.)";
     public static final String REGEX_SELECT_C = "C\\..*?\\s?(?=D\\.)";
-    public static final String REGEX_SELECT_D = "D\\..*?\\s";
+    public static final String REGEX_SELECT_D = "D\\..*?(?=(11\\d{3}|12\\d{3}|13\\d{3}|14\\d{3}|!stop!))";
     public static final String REGEX_ANSWER = "(\\(|（) [A,B,C,D,F,T] (）|\\))";
     public static final String REGEX_FOOT_NUM = "- \\d{1,3} -";
 
@@ -97,6 +97,7 @@ public class RegularUtil {
 
         Matcher dMatcher = dPatern.matcher(file);
         int dn = 0;
+
         while(dMatcher.find()){
             questionList.get(dn).setSelect_D(dMatcher.group());
             dn++;
