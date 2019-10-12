@@ -67,32 +67,42 @@ public class QuestionDAO {
         return id;
     }
 
-    public void qureyQuestion(int[] qnums){
+    public List<QuestionBean> qureyQuestion(int[] qnums){
         SQLiteOpenHelper helper = new DatabaseHelper(context);
         SQLiteDatabase database = helper.getReadableDatabase();
 
-//        for(int i : ){
-//
-//        }
+        String[] qnum_str = new String[qnums.length];
         StringBuilder sb = new StringBuilder("_id in (");
-        for(int i : qnums){
-
+        for(int i = 0; i < qnums.length; i++){
+            if(i != qnums.length-1){
+                sb.append("?,");
+            }else {
+                sb.append("?");
+            }
+            qnum_str[i] = String.valueOf(qnums[i]);
         }
-        Cursor cursor = database.query("tb_question",new String[]{"_id","question","type","select_A","select_B","select_C","select_D","answer"}
-        ,"_id = ?", null,null,null,null);
+        sb.append(")");
+        Cursor cursor = database.query("tb_question",null
+        ,sb.toString(), qnum_str,null,null,null);
 
         List<QuestionBean> questionBeans = new ArrayList<>(qnums.length);
         cursor.moveToFirst();
-        while(cursor != null){
-            int id = cursor.getInt(0);
-            String question = cursor.getString(1);
-            String type = cursor.getString(2);
-            String a_choice = cursor.getString(3);
-            String b_choice = cursor.getString(4);
-            String c_choice = cursor.getString(5);
-            String d_choice = cursor.getString(6);
-            String answer = cursor.getString(7);
-            cursor.moveToNext();
+
+        do{
+            int id = cursor.getInt(cursor.getColumnIndex("_id"));
+            String question = cursor.getString(cursor.getColumnIndex("question"));
+            String type = cursor.getString(cursor.getColumnIndex("type"));
+            String a_choice = cursor.getString(cursor.getColumnIndex("select_A"));
+            String b_choice = cursor.getString(cursor.getColumnIndex("select_B"));
+            String c_choice = cursor.getString(cursor.getColumnIndex("select_C"));
+            String d_choice = cursor.getString(cursor.getColumnIndex("select_D"));
+            String answer = cursor.getString(cursor.getColumnIndex("answer"));
+            String q_class = cursor.getString(cursor.getColumnIndex("q_class"));
+            int testtime = cursor.getInt(cursor.getColumnIndex("testtime"));
+            int wrongtime = cursor.getInt(cursor.getColumnIndex("wrongtime"));
+            int righttime = cursor.getInt(cursor.getColumnIndex("righttime"));
+            String hardlevel = cursor.getString(cursor.getColumnIndex("hardlevel"));
+
             QuestionBean qb = new QuestionBean();
             qb.setId(id);
             qb.setQuestion(question);
@@ -102,20 +112,19 @@ public class QuestionDAO {
             qb.setSelect_C(c_choice);
             qb.setSelect_D(d_choice);
             qb.setAnswer(answer);
+            qb.setqClass(q_class);
+            qb.setTesttime(testtime);
+            qb.setWrongtime(wrongtime);
+            qb.setRighttime(righttime);
+            qb.setHardlevel(hardlevel);
             questionBeans.add(qb);
-        }
-        for(QuestionBean qb : questionBeans){
-            LogUtil.loge(">>>>>>",qb.toString());
-        }
-//
-//        int id = 0;
-//        try{
-//            id = cursor.getInt(0);
-//        }catch (CursorIndexOutOfBoundsException e){
-//            Log.e("SQLite", "first create table" );
-//        }
+        }while (cursor.moveToNext());
+        cursor.close();
 
-        return;
+        for(QuestionBean qb : questionBeans){
+            LogUtil.loge(">>>qureyQuestion>>>",qb.toString());
+        }
+        return questionBeans;
     }
 
 
