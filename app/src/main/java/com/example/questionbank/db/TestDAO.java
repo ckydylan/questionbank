@@ -44,27 +44,30 @@ public class TestDAO {
     /**
      * 获取当天测试记录
      */
-    public List<TestBean> getTodayRecord(){
+    public int getTodayRecord(){
         SQLiteDatabase db = helper.getReadableDatabase();
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
         String datestr = sdf.format(date);
 
         Cursor cursor = db.query("tb_test_record",null,"date_time = ?",new String[]{datestr},null,null,null);
-        List<TestBean> testBeans = new ArrayList<>(10);
+        //List<TestBean> testBeans = new ArrayList<>(10);
         cursor.moveToFirst();
         if(cursor.getCount() == 0){
-            return null;
+            return 0;
         }
+        int num = 0;
         do{
-            TestBean testBean = new TestBean();
-            testBean.setId(cursor.getInt(cursor.getColumnIndex("_id")));
-            testBean.setId(cursor.getInt(cursor.getColumnIndex("q_num")));
-            testBean.setId(cursor.getInt(cursor.getColumnIndex("wrong_num")));
-            testBean.setDate(cursor.getString(cursor.getColumnIndex("date_time")));
-            testBeans.add(testBean);
+//            TestBean testBean = new TestBean();
+//            testBean.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+//            testBean.setId(cursor.getInt(cursor.getColumnIndex("q_num")));
+//            testBean.setId(cursor.getInt(cursor.getColumnIndex("wrong_num")));
+//            testBean.setDate(cursor.getString(cursor.getColumnIndex("date_time")));
+            num += cursor.getInt(cursor.getColumnIndex("q_num"));
+            //testBeans.add(testBean);
         }while (cursor.moveToNext());
-        return testBeans;
+
+        return num;
         //db.query();
     }
 
