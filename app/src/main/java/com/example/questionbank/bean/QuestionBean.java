@@ -171,6 +171,8 @@ public class QuestionBean implements Serializable {
                 ", wrongtime=" + wrongtime +
                 ", righttime=" + righttime +
                 ", hardlevel='" + hardlevel + '\'' +
+                ", lastwrong='" + lastwrong + '\'' +
+                ", answerStatus=" + answerStatus +
                 '}';
     }
 }
