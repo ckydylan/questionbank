@@ -174,6 +174,22 @@ public class QuestionDAO {
         return questionBeans;
     }
 
+    /**
+     * 删除错题
+     */
+    public void deleteWrongQuestion(QuestionBean questionBean){
+        ContentValues values = new ContentValues();
+        //在values中添加内容
+        values.put("hardlevel","normal");
+        //修改条件
+        String whereClause = "_id = ?";
+        //修改添加参数
+        String[] whereArgs = {String.valueOf(questionBean.getId())};
+        database.update("tb_question", values, whereClause, whereArgs);
+        //database.close();
+        return;
+    }
+
     private void processCursor(Cursor cursor, List<QuestionBean> questionBeans) {
         int id = cursor.getInt(cursor.getColumnIndex("_id"));
         String question = cursor.getString(cursor.getColumnIndex("question"));
