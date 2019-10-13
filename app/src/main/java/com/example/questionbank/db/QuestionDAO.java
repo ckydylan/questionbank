@@ -112,6 +112,28 @@ public class QuestionDAO {
     }
 
     /**
+     * 查询所有题目，根据id从低到高排序
+     * @return
+     */
+    public List<QuestionBean> qureyAllQuestionById() {
+        SQLiteDatabase database = helper.getReadableDatabase();
+        Cursor cursor = database.query("tb_question", null
+                , null, null, null, null, "id asc");
+
+        List<QuestionBean> questionBeans = new ArrayList<>(2000);
+        cursor.moveToFirst();
+        if (cursor.getCount() == 0) {
+            return questionBeans;
+        }
+        do {
+            processCursor(cursor, questionBeans);
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        return questionBeans;
+    }
+
+    /**
      * 全部随机抽取，从题库中
      * @param qnums
      * @return
