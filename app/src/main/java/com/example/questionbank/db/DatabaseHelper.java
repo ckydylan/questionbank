@@ -30,6 +30,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //                "hardlevel varchar(10),\n"+
 //                "lastwrong varchar(10))";
 //        db.execSQL(sql);
+                String sql = "create table tb_test (_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "date_time varchar(20),\n" +
+                "q_num INTEGER,\n" +
+                "wrong_num INTEGER)";
+                db.execSQL(sql);
     }
 
     @Override

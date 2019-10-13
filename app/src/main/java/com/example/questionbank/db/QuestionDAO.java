@@ -18,16 +18,14 @@ import java.util.List;
 
 public class QuestionDAO {
     private Context context;
-    private SQLiteDatabase database;
-
+    private SQLiteOpenHelper helper;
     public QuestionDAO(Context context) {
         this.context = context;
-        SQLiteOpenHelper helper = new DatabaseHelper(context);
-        database = helper.getWritableDatabase();
+        helper = new DatabaseHelper(context);
     }
 
     public void addQuestion(ArrayList<QuestionBean> list) {
-
+        SQLiteDatabase database = helper.getWritableDatabase();
         String sql = "insert into tb_question(question,type,select_A,select_B,select_C,select_D,answer) values(?,?,?,?,?,?,?)";
         SQLiteStatement stat = database.compileStatement(sql);
         //database
@@ -54,8 +52,7 @@ public class QuestionDAO {
     }
 
     public int qureyQnum() {
-        //SQLiteOpenHelper helper = new DatabaseHelper(context);
-        //SQLiteDatabase database = helper.getReadableDatabase();
+        SQLiteDatabase database = helper.getWritableDatabase();
         Cursor cursor = database.query("tb_question", new String[]{"_id"}, null, null, null, null, "_id DESC");
         cursor.moveToFirst();
         int id = 0;
@@ -74,8 +71,7 @@ public class QuestionDAO {
      * @param questionBean
      */
     public void updateQuestion(QuestionBean questionBean) {
-        //SQLiteOpenHelper helper = new DatabaseHelper(context);
-        //SQLiteDatabase database = helper.getWritableDatabase();
+        SQLiteDatabase database = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         //在values中添加内容
         values.put("testtime", questionBean.getTesttime());
@@ -100,8 +96,7 @@ public class QuestionDAO {
      * @return
      */
     public List<QuestionBean> qureyQuestion(int[] qnums) {
-        //SQLiteOpenHelper helper = new DatabaseHelper(context);
-        //SQLiteDatabase database = helper.getReadableDatabase();
+        SQLiteDatabase database = helper.getWritableDatabase();
 
         String[] qnum_str = new String[qnums.length];
         StringBuilder sb = new StringBuilder("_id in (");
@@ -139,6 +134,7 @@ public class QuestionDAO {
      * @return
      */
     public List<QuestionBean> qureyWrongQuestionByid() {
+        SQLiteDatabase database = helper.getWritableDatabase();
         List<QuestionBean> questionBeans = new ArrayList<>(50);
 
         Cursor cursor = database.query("tb_question", null
@@ -161,7 +157,7 @@ public class QuestionDAO {
     //todo:
     public List<QuestionBean> qureyWrongQuestionByWrongTimes() {
         List<QuestionBean> questionBeans = new ArrayList<>(50);
-
+        SQLiteDatabase database = helper.getWritableDatabase();
         Cursor cursor = database.query("tb_question", null
                 , "hardlevel = ?", new String[]{"usualWrong"}, null, null, "wrongtime desc");
         if (cursor.getCount() == 0) {
@@ -178,6 +174,7 @@ public class QuestionDAO {
      * 删除错题
      */
     public void deleteWrongQuestion(QuestionBean questionBean){
+        SQLiteDatabase database = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         //在values中添加内容
         values.put("hardlevel","normal");
@@ -188,6 +185,27 @@ public class QuestionDAO {
         database.update("tb_question", values, whereClause, whereArgs);
         //database.close();
         return;
+    }
+
+    /**
+     * 搜索easy-question,根据数据库id排序
+     *
+     * @return
+     */
+    public List<QuestionBean> qureyEzQuestionByid() {
+        SQLiteDatabase database = helper.getWritableDatabase();
+        List<QuestionBean> questionBeans = new ArrayList<>(50);
+
+        Cursor cursor = database.query("tb_question", null
+                , "hardlevel = ?", new String[]{"ez"}, null, null, null);
+        if (cursor.getCount() == 0) {
+            return null;
+        }
+        cursor.moveToFirst();
+        do {
+            processCursor(cursor, questionBeans);
+        } while (cursor.moveToNext());
+        return questionBeans;
     }
 
     private void processCursor(Cursor cursor, List<QuestionBean> questionBeans) {
