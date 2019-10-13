@@ -227,6 +227,22 @@ public class QuestionDAO {
         return;
     }
 
+    /**
+     * 清空题库记录
+     */
+    public void clearQuestionBank(){
+        SQLiteDatabase database = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("testtime",0);
+        values.put("wrongtime",0);
+        values.put("righttime",0);
+        values.put("hardlevel","normal");
+        values.put("lastwrong","undone");
+        database.update("tb_question", values, null, null);
+        database.close();
+        return;
+    }
+
     private void processCursor(Cursor cursor, List<QuestionBean> questionBeans) {
         int id = cursor.getInt(cursor.getColumnIndex("_id"));
         String question = cursor.getString(cursor.getColumnIndex("question"));
