@@ -13,10 +13,19 @@ import java.io.InputStream;
 public class AssertUtil {
     public static String ASSERT_DB = "quBank.db";
     public static String DB_URL = "/data/data/" + "com.example.questionbank"+ "/databases/" + ASSERT_DB;
-
+    //public static String DB_URL_DIR = "/data/data/" + "com.example.questionbank"+ "/databases/";
 
     public static void copyFile(Context context){
         File file = new File(DB_URL);
+
+        if (!file.exists()){
+            try {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         if(file.length() > 1024*25){
             return;
         }

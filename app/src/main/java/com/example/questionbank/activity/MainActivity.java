@@ -29,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AssertUtil.copyFile(MainActivity.this);
+            }
+        }).start();
+
         new ImmersiveStatusBarSettings().settingStatusBar(this);
         BottomBar bottomBar = findViewById(R.id.bottom_bar);
         bottomBar.setContainer(R.id.fl_container)
@@ -46,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         R.mipmap.setting_before,
                         R.mipmap.setting_after)
                 .build();
-        AssertUtil.copyFile(this);
+
 //        if(new QuestionDAO(this).qureyQnum() < 2000){
 //            try {
 //                new QuestionDAO(this).addQuestion(RegularUtil.processQuestion(this));
