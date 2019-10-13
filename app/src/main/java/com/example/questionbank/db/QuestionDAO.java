@@ -91,27 +91,14 @@ public class QuestionDAO {
     }
     /**
      * 查询所有题目，根据做的次数由低到高排序
-     * @param qnums
      * @return
      */
-    public List<QuestionBean> qureyAllQuestionByTestTimes(int[] qnums) {
-        SQLiteDatabase database = helper.getWritableDatabase();
-
-        String[] qnum_str = new String[qnums.length];
-        StringBuilder sb = new StringBuilder("_id in (");
-        for (int i = 0; i < qnums.length; i++) {
-            if (i != qnums.length - 1) {
-                sb.append("?,");
-            } else {
-                sb.append("?");
-            }
-            qnum_str[i] = String.valueOf(qnums[i]);
-        }
-        sb.append(")");
+    public List<QuestionBean> qureyAllQuestionByTestTimes() {
+        SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor = database.query("tb_question", null
-                , sb.toString(), qnum_str, null, null, null);
+                , null, null, null, null, "testtime asc");
 
-        List<QuestionBean> questionBeans = new ArrayList<>(100);
+        List<QuestionBean> questionBeans = new ArrayList<>(2000);
         cursor.moveToFirst();
         if (cursor.getCount() == 0) {
             return questionBeans;
