@@ -82,6 +82,7 @@ public class QuestionDAO {
         values.put("wrongtime", questionBean.getWrongtime());
         values.put("righttime", questionBean.getRighttime());
         values.put("lastwrong", questionBean.getLastwrong());
+        values.put("hardlevel",questionBean.getHardlevel());
         //修改条件
         String whereClause = "_id = ?";
         //修改添加参数
