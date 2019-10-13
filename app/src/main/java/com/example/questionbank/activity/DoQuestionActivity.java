@@ -3,6 +3,7 @@ package com.example.questionbank.activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,7 +122,6 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         question_distribution = intent.getStringExtra("question_distribution");
         multiple_choice_num = intent.getStringExtra("multiple_choice_num");
         judge_choice_num = intent.getStringExtra("judge_choice_num");
-
         QuestionDAO questionDAO = new QuestionDAO(this);
         questionBeanList = questionDAO.qureyQuestion(RollOutUtil.rollOut(RollOutUtil.ALL_RANDOM,Integer.parseInt(multiple_choice_num),Integer.parseInt(judge_choice_num)));
         testBean = new TestBean();

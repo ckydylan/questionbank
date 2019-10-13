@@ -37,4 +37,14 @@ public class TestBean {
     public void setWrongQuNum(int wrongQuNum) {
         this.wrongQuNum = wrongQuNum;
     }
+
+    @Override
+    public String toString() {
+        return "TestBean{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", qNum=" + qNum +
+                ", wrongQuNum=" + wrongQuNum +
+                '}';
+    }
 }
