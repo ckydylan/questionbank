@@ -89,6 +89,40 @@ public class QuestionDAO {
         //database.close();
         return;
     }
+    /**
+     * 查询所有题目，根据做的次数由低到高排序
+     * @param qnums
+     * @return
+     */
+    public List<QuestionBean> qureyAllQuestionByTestTimes(int[] qnums) {
+        SQLiteDatabase database = helper.getWritableDatabase();
+
+        String[] qnum_str = new String[qnums.length];
+        StringBuilder sb = new StringBuilder("_id in (");
+        for (int i = 0; i < qnums.length; i++) {
+            if (i != qnums.length - 1) {
+                sb.append("?,");
+            } else {
+                sb.append("?");
+            }
+            qnum_str[i] = String.valueOf(qnums[i]);
+        }
+        sb.append(")");
+        Cursor cursor = database.query("tb_question", null
+                , sb.toString(), qnum_str, null, null, null);
+
+        List<QuestionBean> questionBeans = new ArrayList<>(100);
+        cursor.moveToFirst();
+        if (cursor.getCount() == 0) {
+            return questionBeans;
+        }
+        do {
+            processCursor(cursor, questionBeans);
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        return questionBeans;
+    }
 
     /**
      * 全部随机抽取，从题库中
@@ -242,6 +276,8 @@ public class QuestionDAO {
         database.close();
         return;
     }
+
+
 
     private void processCursor(Cursor cursor, List<QuestionBean> questionBeans) {
         int id = cursor.getInt(cursor.getColumnIndex("_id"));

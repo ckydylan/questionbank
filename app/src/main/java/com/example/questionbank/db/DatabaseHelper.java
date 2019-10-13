@@ -3,6 +3,7 @@ package com.example.questionbank.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -30,11 +31,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //                "hardlevel varchar(10),\n"+
 //                "lastwrong varchar(10))";
 //        db.execSQL(sql);
-                String sql = "create table tb_test_record (_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "date_time varchar(20),\n" +
-                "q_num INTEGER,\n" +
-                "wrong_num INTEGER)";
+                String sql = "create table IF NOT EXISTS tb_test_record (_id INTEGER PRIMARY KEY AUTOINCREMENT,date_time varchar(20),q_num INTEGER,wrong_num INTEGER)";
+
                 db.execSQL(sql);
+        //Log.e("sb", " db.execSQL(sql2): >>>>>>>" );
     }
 
     @Override
@@ -42,9 +42,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 // 数据库版本号变更会调用 onUpgrade 函数，在这根据版本号进行升级数据库
         switch (oldVersion) {
             case 1:
-                // do something
+                Log.e("sb", "onUpgrade: >>>>>>>" );
+                //db.execSQL("DROP TABLE IF EXISTS tb_test_record");
+                this.onCreate(db);
                 break;
-
             default:
                 break;
         }

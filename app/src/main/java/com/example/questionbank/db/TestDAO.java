@@ -29,14 +29,17 @@ public class TestDAO {
      * @param tb
      */
     public void addTestRecord(TestBean tb){
+
         SQLiteDatabase database = helper.getWritableDatabase();
+        helper.onUpgrade(database,1,2);
+
         //String sql = "insert into tb_test_record(q_num,wrong_num,date_time) values(?,?,?)";
         ContentValues contentValues = new ContentValues();
         contentValues.put("q_num", tb.getqNum());
         contentValues.put("wrong_num", tb.getWrongQuNum());
         contentValues.put("date_time", tb.getDate());
         database.insert("tb_test_record", null, contentValues);
-        database.close();
+        //database.close();
     }
     /**
      * 获取当天测试记录
