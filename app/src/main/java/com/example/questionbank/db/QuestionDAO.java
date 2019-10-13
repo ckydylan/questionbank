@@ -112,13 +112,13 @@ public class QuestionDAO {
     }
 
     /**
-     * 查询所有题目，根据id从低到高排序
+     * 查询所有题目，根据id排序
      * @return
      */
     public List<QuestionBean> qureyAllQuestionById() {
         SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor = database.query("tb_question", null
-                , null, null, null, null, "id asc");
+                , null, null, null, null, "_id asc");
 
         List<QuestionBean> questionBeans = new ArrayList<>(2000);
         cursor.moveToFirst();
@@ -131,6 +131,18 @@ public class QuestionDAO {
         cursor.close();
 
         return questionBeans;
+    }
+
+    /**
+     * 查询题数有多少题一次都没有做过
+     * @return
+     */
+    public int qureyUnDoneQuentstionNum() {
+        SQLiteDatabase database = helper.getReadableDatabase();
+        Cursor cursor = database.query("tb_question", null
+                , "testtime = ?", new String[]{"0"}, null, null, null);
+        cursor.moveToFirst();
+        return cursor.getCount();
     }
 
     /**
