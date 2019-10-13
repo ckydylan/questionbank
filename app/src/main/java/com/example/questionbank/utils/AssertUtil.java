@@ -17,7 +17,7 @@ public class AssertUtil {
 
     public static void copyFile(Context context){
         File file = new File(DB_URL);
-        if(file.length() > 1000){
+        if(file.length() > 1024*25){
             return;
         }
         try {
