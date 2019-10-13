@@ -188,6 +188,7 @@ public class QuestionDAO {
         int wrongtime = cursor.getInt(cursor.getColumnIndex("wrongtime"));
         int righttime = cursor.getInt(cursor.getColumnIndex("righttime"));
         String hardlevel = cursor.getString(cursor.getColumnIndex("hardlevel"));
+        String lastwrong = cursor.getString(cursor.getColumnIndex("lastwrong"));
 
         QuestionBean qb = new QuestionBean();
         qb.setId(id);
@@ -203,6 +204,7 @@ public class QuestionDAO {
         qb.setWrongtime(wrongtime);
         qb.setRighttime(righttime);
         qb.setHardlevel(hardlevel);
+        qb.setLastwrong(lastwrong);
         qb.setAnswerStatus(2);
         questionBeans.add(qb);
     }
