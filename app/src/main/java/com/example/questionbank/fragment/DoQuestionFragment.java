@@ -29,18 +29,19 @@ import java.util.List;
  * @author cky
  * date 2019-10-11
  */
-public class DoQuestionFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
+public class DoQuestionFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
     private QuestionBean questionBean;
     private Drawable drawable;
     private int index;
     private List<QuestionBean> questionBeanList;
     private boolean isFinish = false;
-    TextView tv_answer, tv_person_select, tv_question_id;
+    TextView tv_answer, tv_person_select, tv_question_id, tv_set_ez;
     TextView tv_question_type, tv_question;
     RadioGroup rg_select;
     RadioButton rb_a, rb_b, rb_c, rb_d;
     ConstraintLayout cl_answer;
     Button btn_finish_question;
+    boolean flag = false;
 
 
     public DoQuestionFragment(int index) {
@@ -69,6 +70,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         tv_question = view.findViewById(R.id.tv_question);
         rg_select = view.findViewById(R.id.rg_select);
         tv_question_id = view.findViewById(R.id.tv_question_id);
+        tv_set_ez = view.findViewById(R.id.tv_set_ez);
         rb_a = view.findViewById(R.id.rb_a);
         rb_b = view.findViewById(R.id.rb_b);
         rb_c = view.findViewById(R.id.rb_c);
@@ -79,6 +81,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         btn_finish_question = view.findViewById(R.id.btn_finish_question);
 
         rg_select.setOnCheckedChangeListener(this);
+        tv_set_ez.setOnClickListener(this);
 
         showLastButton();
         setRadioButtonBG();
@@ -90,6 +93,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
      */
     private void setQuestion() {
         tv_question_id.setText(index + 1 + "/" + questionBeanList.size());
+        setEZOrNormal();
         if ("choice".equals(questionBean.getType())) {
             tv_question_type.setText("选择");
             tv_question.setText(questionBean.getQuestion());
@@ -105,7 +109,19 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             rb_c.setVisibility(View.INVISIBLE);
             rb_d.setVisibility(View.INVISIBLE);
         }
+    }
 
+    /**
+     * 设置是否为简单题
+     */
+    private void setEZOrNormal() {
+        if ("normal".equals(questionBeanList.get(index).getHardlevel())) {
+            tv_set_ez.setText("设置为简单题");
+            tv_set_ez.setBackgroundResource(R.color.cccccc);
+        } else if ("ez".equals(questionBeanList.get(index).getHardlevel())) {
+            tv_set_ez.setText("简单");
+            tv_set_ez.setBackgroundResource(R.drawable.btn_do_question_bg);
+        }
     }
 
     /**
@@ -141,16 +157,17 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             String answer = questionBean.getAnswer();
             tv_answer.setText(answer);
             tv_person_select.setText(personSelect);
-
+            int historyTime = questionBeanList.get(index).getTesttime();
+            questionBeanList.get(index).setTesttime(historyTime+1);
             //todo:cky
             //答案不正确
             if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
                 tv_person_select.setTextColor(Color.RED);
                 questionBeanList.get(index).setAnswerStatus(0);
-                Log.d("getWrongtime", questionBeanList.get(index).getWrongtime() + "");
                 int historyTimes = questionBeanList.get(index).getWrongtime();
                 questionBeanList.get(index).setWrongtime(historyTimes + 1);
-                Log.d("getWrongtime", questionBeanList.get(index).getWrongtime() + "");
+                questionBeanList.get(index).setHardlevel("usualWrong");
+                questionBeanList.get(index).setLastwrong("false");
 
             } else {
                 //答案正确
@@ -158,6 +175,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 tv_person_select.setTextColor(Color.parseColor("#4664E6"));
                 int historyTimes = questionBeanList.get(index).getRighttime();
                 questionBeanList.get(index).setRighttime(historyTimes + 1);
+                questionBeanList.get(index).setLastwrong("true");
             }
         }
     }
@@ -175,29 +193,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     private void showLastButton() {
         if (index == questionBeanList.size() - 1) {
             btn_finish_question.setVisibility(View.VISIBLE);
-            btn_finish_question.setOnClickListener(v -> {
-                for (QuestionBean question : questionBeanList) {
-                    if (question.getAnswerStatus() != 2) {
-                        isFinish = true;
-                    } else {
-                        isFinish = false;
-                        break;
-                    }
-                }
-                if (!isFinish) {
-                    Toast.makeText(getContext(), "没做完", Toast.LENGTH_SHORT).show();
-                } else {
-                    for (QuestionBean question : questionBeanList) {
-                        Log.d("question",question.toString());
-                        new QuestionDAO(getActivity()).updateQuestion(question);
-
-                    }
-//                    if (getActivity() != null)
-//                        getActivity().finish();
-                    //todo:zp
-
-                }
-            });
+            btn_finish_question.setOnClickListener(this);
         }
     }
 
@@ -233,5 +229,43 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     public void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_set_ez:
+                if (!flag) {
+                    tv_set_ez.setText("简单");
+                    tv_set_ez.setBackgroundResource(R.drawable.btn_do_question_bg);
+                    Toast.makeText(getActivity(), "此题目已设置为简单，可以再次点击恢复", Toast.LENGTH_LONG).show();
+                    questionBeanList.get(index).setHardlevel("ez");
+                    flag = !flag;
+                } else {
+                    tv_set_ez.setText("设置为简单题");
+                    tv_set_ez.setBackgroundResource(R.color.cccccc);
+                    questionBeanList.get(index).setHardlevel("normal");
+                    flag = !flag;
+                }
+                break;
+            case R.id.btn_finish_question:
+                for (QuestionBean question : questionBeanList) {
+                    if (question.getAnswerStatus() != 2) {
+                        isFinish = true;
+                    } else {
+                        isFinish = false;
+                        break;
+                    }
+                }
+                if (!isFinish) {
+                    Toast.makeText(getContext(), "没做完", Toast.LENGTH_SHORT).show();
+                } else {
+                    for (QuestionBean question : questionBeanList) {
+                        Log.d("question", question.toString());
+                        new QuestionDAO(getActivity()).updateQuestion(question);
+                    }
+                }
+                break;
+        }
     }
 }
