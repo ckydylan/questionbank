@@ -22,6 +22,7 @@ import com.example.questionbank.R;
 import com.example.questionbank.adapter.AnswerSheetAdapter;
 import com.example.questionbank.adapter.QuestionAdapter;
 import com.example.questionbank.bean.QuestionBean;
+import com.example.questionbank.bean.TestBean;
 import com.example.questionbank.db.QuestionDAO;
 import com.example.questionbank.utils.ImmersiveStatusBarSettings;
 import com.example.questionbank.utils.RollOutUtil;
@@ -38,6 +39,11 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
     String multiple_choice_num = "";
     String question_distribution = "";
     private List<QuestionBean> questionBeanList;
+    TestBean testBean;
+
+    public TestBean getTestBean() {
+        return testBean;
+    }
 
     public List<QuestionBean> getQuestionBeanList() {
         return questionBeanList;
@@ -118,6 +124,7 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
 
         QuestionDAO questionDAO = new QuestionDAO(this);
         questionBeanList = questionDAO.qureyQuestion(RollOutUtil.rollOut(RollOutUtil.ALL_RANDOM,Integer.parseInt(multiple_choice_num),Integer.parseInt(judge_choice_num)));
+        testBean = new TestBean();
     }
 
 

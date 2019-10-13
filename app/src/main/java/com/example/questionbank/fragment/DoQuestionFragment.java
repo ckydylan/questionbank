@@ -15,14 +15,21 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.bean.QuestionBean;
+import com.example.questionbank.bean.TestBean;
 import com.example.questionbank.db.QuestionDAO;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +49,9 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     ConstraintLayout cl_answer;
     Button btn_finish_question;
     boolean flag = false;
+    TestBean testBean;
+
+
 
 
     public DoQuestionFragment(int index) {
@@ -62,6 +72,8 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         super.onViewCreated(view, savedInstanceState);
         questionBeanList = ((DoQuestionActivity) getActivity()).getQuestionBeanList();
         questionBean = ((DoQuestionActivity) getActivity()).getQuestionBeanList().get(index);
+        testBean =((DoQuestionActivity) getActivity()).getTestBean();
+        testBean.setqNum(index+1);
         initView(view);
     }
 
@@ -102,6 +114,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             rb_c.setText(questionBean.getSelect_C());
             rb_d.setText(questionBean.getSelect_D());
         } else if ("judge".equals(questionBean.getType())) {
+
             tv_question_type.setText("判断");
             tv_question.setText(questionBean.getQuestion());
             rb_a.setText("T");
@@ -158,10 +171,11 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             tv_answer.setText(answer);
             tv_person_select.setText(personSelect);
             int historyTime = questionBeanList.get(index).getTesttime();
-            questionBeanList.get(index).setTesttime(historyTime+1);
-            //todo:cky
+            questionBeanList.get(index).setTesttime(historyTime + 1);
             //答案不正确
             if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
+                testBean.setWrongQuNum(testBean.getWrongQuNum()+1);
+                Log.d("wrongNumb",testBean.getWrongQuNum()+"");
                 tv_person_select.setTextColor(Color.RED);
                 questionBeanList.get(index).setAnswerStatus(0);
                 int historyTimes = questionBeanList.get(index).getWrongtime();
@@ -190,10 +204,28 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         rb_d.setClickable(false);
     }
 
+    /**
+     * 最后一个完成按钮
+     */
     private void showLastButton() {
         if (index == questionBeanList.size() - 1) {
             btn_finish_question.setVisibility(View.VISIBLE);
             btn_finish_question.setOnClickListener(this);
+        }
+    }
+
+    private void alert() {
+        if (getActivity() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("信息");
+            float rightPer = (float) (index+1 - testBean.getWrongQuNum()) / (index+1);
+            Log.d("test","testBean.getWrongQuNum()"+testBean.getWrongQuNum());
+            NumberFormat nt = NumberFormat.getPercentInstance();
+            nt.setMinimumFractionDigits(2);
+            String format = nt.format(rightPer);
+            builder.setMessage("已做:" + (index+1) + "条\n\t错误:" + (testBean.getWrongQuNum()) + "条" + "\n\t" + "正确率：" + format);
+            builder.setPositiveButton("是", (dialog, which) -> getActivity().finish());
+            builder.show();
         }
     }
 
@@ -261,9 +293,14 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                     Toast.makeText(getContext(), "没做完", Toast.LENGTH_SHORT).show();
                 } else {
                     for (QuestionBean question : questionBeanList) {
-                        Log.d("question", question.toString());
                         new QuestionDAO(getActivity()).updateQuestion(question);
                     }
+                    Date date = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+                    String s = sdf.format(date);
+                    testBean.setDate(s);
+                    Log.d("date",testBean.getDate());
+                    alert();
                 }
                 break;
         }

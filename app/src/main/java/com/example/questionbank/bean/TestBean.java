@@ -2,7 +2,7 @@ package com.example.questionbank.bean;
 
 public class TestBean {
     int id;
-    String data;
+    String date;
     int qNum;
     int wrongQuNum;
 
@@ -14,12 +14,12 @@ public class TestBean {
         this.id = id;
     }
 
-    public String getData() {
-        return data;
+    public String getDate() {
+        return date;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDate(String data) {
+        this.date = data;
     }
 
     public int getqNum() {
