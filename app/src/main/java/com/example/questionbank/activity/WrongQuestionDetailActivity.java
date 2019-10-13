@@ -19,7 +19,7 @@ import com.example.questionbank.utils.ImmersiveStatusBarSettings;
  * date 2019-10-12
  */
 public class WrongQuestionDetailActivity extends Activity {
-    TextView tv_question_type,tv_question_id,tv_question,tv_answer;
+    TextView tv_question_type,tv_question_id,tv_question,tv_answer,tv_title;
     RadioButton rb_a, rb_b, rb_c, rb_d;
     private Drawable drawable;
 
@@ -36,6 +36,7 @@ public class WrongQuestionDetailActivity extends Activity {
         tv_question_id = findViewById(R.id.tv_question_id);
         tv_question = findViewById(R.id.tv_question);
         tv_answer = findViewById(R.id.tv_answer);
+        tv_title = findViewById(R.id.tv_title);
         rb_a = findViewById(R.id.rb_a);
         rb_b = findViewById(R.id.rb_b);
         rb_c = findViewById(R.id.rb_c);
@@ -47,6 +48,7 @@ public class WrongQuestionDetailActivity extends Activity {
         tv_question_id.setText(String.valueOf(questionBean.getId()));
         tv_question.setText(questionBean.getQuestion());
         tv_answer.setText(questionBean.getAnswer());
+        tv_title.setText("详情");
         if ("choice".equals(questionBean.getType())){
             tv_question_type.setText("选择");
             rb_a.setText(questionBean.getSelect_A());

@@ -20,6 +20,7 @@
         <activity android:name=".activity.DoQuestionActivity" android:launchMode="singleTop"/>
         <activity android:name=".activity.WrongQuestionCollectionActivity" android:launchMode="singleTop"/>
         <activity android:name=".activity.WrongQuestionDetailActivity" android:launchMode="singleTop"/>
+        <activity android:name=".activity.ProficiencyQuestionActivity" android:launchMode="singleTop"/>
     </application>
 
 </manifest>

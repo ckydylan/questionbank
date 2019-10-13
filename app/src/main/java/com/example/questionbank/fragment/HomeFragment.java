@@ -15,13 +15,14 @@ import androidx.fragment.app.Fragment;
 import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.activity.QuestionRoundActivity;
+import com.example.questionbank.db.TestDAO;
 
 /**
  * @author cky
  * date 2019-10-10
  */
 public class HomeFragment extends Fragment implements View.OnClickListener {
-    TextView tv_title,tv_question_edit;
+    TextView tv_title,tv_question_edit,tv_question_finish_num;
     Button btn_do_question;
     TextView tv_select;
     String judge_choice_num = "100";
@@ -40,7 +41,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         tv_question_edit = view.findViewById(R.id.tv_question_edit);//题库中修改
         btn_do_question = view.findViewById(R.id.btn_do_question);//题库中开始做题
         tv_select = view.findViewById(R.id.tv_select);//题库中开始做题
+        tv_question_finish_num = view.findViewById(R.id.tv_question_finish_num);
 
+        new TestDAO(getContext()).getTodayRecord().size();
+        tv_question_finish_num.setText(String.valueOf(new TestDAO(getContext()).getTodayRecord().size()));
         tv_question_edit.setOnClickListener(this);
         btn_do_question.setOnClickListener(this);
         tv_title.setText("首页");

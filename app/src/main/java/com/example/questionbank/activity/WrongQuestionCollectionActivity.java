@@ -55,7 +55,7 @@ public class WrongQuestionCollectionActivity extends Activity implements Spinner
         initData();
         LinearLayoutManager manager = new LinearLayoutManager(this);
         rv_wrong_question.setLayoutManager(manager);
-        adapter = new WrongQuestionAdapter(wrongList);
+        adapter = new WrongQuestionAdapter(wrongList,this);
 
         adapter.setOnItemClickListener(new WrongQuestionAdapter.OnItemClickListener() {
             @Override
@@ -63,8 +63,12 @@ public class WrongQuestionCollectionActivity extends Activity implements Spinner
                 QuestionBean questionBean = wrongList.get(position);
                 Intent intent = new Intent(WrongQuestionCollectionActivity.this, WrongQuestionDetailActivity.class);
                 intent.putExtra("wrong_question", questionBean);
-                // todo 传递点击的对象
                 startActivity(intent);
+            }
+
+            @Override
+            public void delete(int position) {
+                wrongList.remove(position);
             }
         });
         rv_wrong_question.setAdapter(adapter);

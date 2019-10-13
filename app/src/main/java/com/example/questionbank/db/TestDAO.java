@@ -50,7 +50,7 @@ public class TestDAO {
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
         String datestr = sdf.format(date);
 
-        Cursor cursor = db.query("tb_test_record",null,"date = ?",new String[]{datestr},null,null,null);
+        Cursor cursor = db.query("tb_test_record",null,"date_time = ?",new String[]{datestr},null,null,null);
         List<TestBean> testBeans = new ArrayList<>(10);
         cursor.moveToFirst();
         if(cursor.getCount() == 0){

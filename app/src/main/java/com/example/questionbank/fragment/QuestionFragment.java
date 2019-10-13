@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.questionbank.R;
+import com.example.questionbank.activity.ProficiencyQuestionActivity;
 import com.example.questionbank.activity.WrongQuestionCollectionActivity;
 
 /**
@@ -51,6 +52,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                 break;
             //熟练题
             case R.id.cv_proficiency_question:
+                startActivity(new Intent(getContext(), ProficiencyQuestionActivity.class));
 
                 break;
             //数据统计

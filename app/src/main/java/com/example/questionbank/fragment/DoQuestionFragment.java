@@ -24,6 +24,7 @@ import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.bean.QuestionBean;
 import com.example.questionbank.bean.TestBean;
 import com.example.questionbank.db.QuestionDAO;
+import com.example.questionbank.db.TestDAO;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -183,6 +184,13 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 questionBeanList.get(index).setHardlevel("usualWrong");
                 questionBeanList.get(index).setLastwrong("false");
 
+                if (tv_set_ez.getText().toString().equals("熟练")){
+                    tv_set_ez.setText("您已做错");
+                    tv_set_ez.setTextColor(Color.RED);
+                    tv_set_ez.setBackgroundResource(R.color.cccccc);
+                    questionBeanList.get(index).setHardlevel("normal");
+                    tv_set_ez.setClickable(false);
+                }
             } else {
                 //答案正确
                 questionBeanList.get(index).setAnswerStatus(1);
@@ -268,13 +276,13 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         switch (v.getId()) {
             case R.id.tv_set_ez:
                 if (!flag) {
-                    tv_set_ez.setText("简单");
+                    tv_set_ez.setText("熟练");
                     tv_set_ez.setBackgroundResource(R.drawable.btn_do_question_bg);
-                    Toast.makeText(getActivity(), "此题目已设置为简单，可以再次点击恢复", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "此题目已设置为熟练，可以再次点击恢复", Toast.LENGTH_SHORT).show();
                     questionBeanList.get(index).setHardlevel("ez");
                     flag = !flag;
                 } else {
-                    tv_set_ez.setText("设置为简单题");
+                    tv_set_ez.setText("设置为熟练题");
                     tv_set_ez.setBackgroundResource(R.color.cccccc);
                     questionBeanList.get(index).setHardlevel("normal");
                     flag = !flag;
@@ -290,16 +298,16 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                     }
                 }
                 if (!isFinish) {
-                    Toast.makeText(getContext(), "没做完", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "您未做完，请仔细检查", Toast.LENGTH_SHORT).show();
                 } else {
                     for (QuestionBean question : questionBeanList) {
                         new QuestionDAO(getActivity()).updateQuestion(question);
                     }
                     Date date = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+                    SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
                     String s = sdf.format(date);
                     testBean.setDate(s);
-                    Log.d("date",testBean.getDate());
+                    new TestDAO(getContext()).addTestRecord(testBean);
                     alert();
                 }
                 break;

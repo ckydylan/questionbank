@@ -1,6 +1,7 @@
 package com.example.questionbank.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,10 @@ import java.util.List;
 /**
  * @author cky
  * date 2019-10-12
- * 错题
+ * 熟练题
  */
-public class WrongQuestionAdapter extends RecyclerView.Adapter<WrongQuestionAdapter.ViewHolder> implements ItemSlideHelper.Callback{
-    List<QuestionBean> wrongQuestionList;
+public class ProficiencyQuestionAdapter extends RecyclerView.Adapter<ProficiencyQuestionAdapter.ViewHolder> implements ItemSlideHelper.Callback{
+    List<QuestionBean> proficiencyQuestionList;
     private RecyclerView mRecyclerView;
     private OnItemClickListener onItemClickListener = null;
     private QuestionDAO questionDAO;
@@ -40,10 +41,11 @@ public class WrongQuestionAdapter extends RecyclerView.Adapter<WrongQuestionAdap
         void delete(int position);
     }
 
-    public WrongQuestionAdapter(List<QuestionBean> wrongQuestionList,Context context) {
-        this.wrongQuestionList = new ArrayList<>();
-        for (QuestionBean q : wrongQuestionList) {
-            this.wrongQuestionList.add(q);
+    public ProficiencyQuestionAdapter(List<QuestionBean> proficiencyQuestionList, Context context) {
+
+        this.proficiencyQuestionList = new ArrayList<>();
+        for (QuestionBean q : proficiencyQuestionList) {
+            this.proficiencyQuestionList.add(q);
         }
         this.context = context;
     }
@@ -52,21 +54,23 @@ public class WrongQuestionAdapter extends RecyclerView.Adapter<WrongQuestionAdap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         questionDAO = new QuestionDAO(context);
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_wrong_question,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_proficiency_question,parent,false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        QuestionBean questionBean = wrongQuestionList.get(position);
-        holder.tv_wrong_question_title.setText(questionBean.getQuestion());
+        QuestionBean questionBean = proficiencyQuestionList.get(position);
+        holder.tv_proficiency_question_title.setText(questionBean.getQuestion());
 
         //删除功能
         holder.iv_message_delete.setOnClickListener(v -> {
-            QuestionBean remove = wrongQuestionList.remove(position);
+            QuestionBean remove = proficiencyQuestionList.remove(position);
+            Log.d("position2",position+"");
+
             onItemClickListener.delete(position);
-            questionDAO.deleteWrongQuestion(remove);
+            questionDAO.deleteEzQuestion(remove);
             notifyDataSetChanged();
         });
 
@@ -81,7 +85,7 @@ public class WrongQuestionAdapter extends RecyclerView.Adapter<WrongQuestionAdap
 
     @Override
     public int getItemCount() {
-        return wrongQuestionList.size();
+        return proficiencyQuestionList.size();
     }
 
     @Override
@@ -112,11 +116,11 @@ public class WrongQuestionAdapter extends RecyclerView.Adapter<WrongQuestionAdap
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView tv_wrong_question_title;
+        TextView tv_proficiency_question_title;
         ImageView iv_message_delete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv_wrong_question_title = itemView.findViewById(R.id.tv_proficiency_question_title);
+            tv_proficiency_question_title = itemView.findViewById(R.id.tv_proficiency_question_title);
             iv_message_delete = itemView.findViewById(R.id.iv_message_delete);
         }
     }
