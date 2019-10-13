@@ -19,7 +19,6 @@ public class RollOutUtil {
             case ALL_RANDOM:
                 return allRandom(cNum,jNUm);
             case JUST_WRONG:
-
                 break;
             case NO_EZ:
 
@@ -27,6 +26,8 @@ public class RollOutUtil {
         }
         return null;
     }
+
+
 
     private static int[]  allRandom(int cNum,int jNum){
         int[] cArray = random(1200,cNum);
@@ -71,7 +72,35 @@ public class RollOutUtil {
         return cArray;
     }
 
+    /**
+     * 设计失误导致的方法冗余
+     * 随机产生错误题目的position
+     * 取的时候下标还要记得-1，不然会越界异常
+     * @param cNum
+     * @param jNUm
+     * @return
+     */
+    public static List<int[]> rollOutWrong(int cNum,int jNUm,int cBound, int jBound){
+        return allRandom(cNum,jNUm,cBound,jBound);
+    }
+
+    private static List<int[]>  allRandom(int cNum,int jNum , int cBound, int jBound){
+        int[] cArray = random(cBound,cNum);
+        int[] jArray = random(jBound,jNum);
+        //System.arraycopy(cArray, 0, jArray, 0, cArray.length);
+//        int[] result = Arrays.copyOf(cArray,cNum + jNum);
+//        for(int i = cNum; i < cNum + jNum;i++){
+//            result[i] = jArray[i-cNum];
+//        }
+        List<int[]> ints = new ArrayList<>(2);
+        ints.add(cArray);
+        ints.add(jArray);
+        return ints;
+    }
+
     public static void main(String[] args) {
-        allRandom(20,2);
+        for(int[] i : rollOutWrong(2,4,10,4)){
+            System.out.println(Arrays.toString(i));
+        }
     }
 }

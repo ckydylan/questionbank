@@ -10,7 +10,9 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.example.questionbank.bean.QuestionBean;
+import com.example.questionbank.bean.WrongQuestionBean;
 import com.example.questionbank.utils.LogUtil;
+import com.example.questionbank.utils.RollOutUtil;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
 public class QuestionDAO {
     private Context context;
     private SQLiteOpenHelper helper;
+
     public QuestionDAO(Context context) {
         this.context = context;
         helper = new DatabaseHelper(context);
@@ -78,7 +81,7 @@ public class QuestionDAO {
         values.put("wrongtime", questionBean.getWrongtime());
         values.put("righttime", questionBean.getRighttime());
         values.put("lastwrong", questionBean.getLastwrong());
-        values.put("hardlevel",questionBean.getHardlevel());
+        values.put("hardlevel", questionBean.getHardlevel());
         //修改条件
         String whereClause = "_id = ?";
         //修改添加参数
@@ -89,8 +92,10 @@ public class QuestionDAO {
         //database.close();
         return;
     }
+
     /**
      * 查询所有题目，根据做的次数由低到高排序
+     *
      * @return
      */
     public List<QuestionBean> qureyAllQuestionByTestTimes() {
@@ -113,6 +118,7 @@ public class QuestionDAO {
 
     /**
      * 查询所有题目，根据id排序
+     *
      * @return
      */
     public List<QuestionBean> qureyAllQuestionById() {
@@ -135,6 +141,7 @@ public class QuestionDAO {
 
     /**
      * 查询题数有多少题一次都没有做过
+     *
      * @return
      */
     public int qureyUnDoneQuentstionNum() {
@@ -142,11 +149,13 @@ public class QuestionDAO {
         Cursor cursor = database.query("tb_question", null
                 , "testtime = ?", new String[]{"0"}, null, null, null);
         cursor.moveToFirst();
-        return cursor.getCount();
+        int n = cursor.getCount();
+        return n;
     }
 
     /**
      * 全部随机抽取，从题库中
+     *
      * @param qnums
      * @return
      */
@@ -184,18 +193,88 @@ public class QuestionDAO {
     }
 
     /**
+     * 错题中单选题
+     */
+    public List<QuestionBean> getChoiceWrongQuestion() {
+        SQLiteDatabase database = helper.getReadableDatabase();
+        List<QuestionBean> questionBeans = new ArrayList<>(64);
+
+        Cursor cursor = database.query("tb_question", null
+                , "hardlevel = ?,type = ?", new String[]{"usualWrong", "choice"}, null, null, null);
+        if (cursor.getCount() == 0) {
+            return questionBeans;
+        }
+        cursor.moveToFirst();
+        do {
+            processCursor(cursor, questionBeans);
+        } while (cursor.moveToNext());
+        return questionBeans;
+    }
+
+    /**
+     * 错题中判断题题
+     */
+    public List<QuestionBean> getJudgeWrongQuestion() {
+        SQLiteDatabase database = helper.getReadableDatabase();
+        List<QuestionBean> questionBeans = new ArrayList<>(64);
+
+        Cursor cursor = database.query("tb_question", null
+                , "hardlevel = ?,type = ?", new String[]{"usualWrong", "judge"}, null, null, null);
+        if (cursor.getCount() == 0) {
+            return questionBeans;
+        }
+        cursor.moveToFirst();
+        do {
+            processCursor(cursor, questionBeans);
+        } while (cursor.moveToNext());
+        return questionBeans;
+    }
+
+    /**
+     * 获取所有错题，并按照题型分开
+     */
+    public WrongQuestionBean getAllWrongQuestionByQType() {
+        return new WrongQuestionBean(getChoiceWrongQuestion(), getJudgeWrongQuestion());
+    }
+
+    /**
+     * 获得随机的错题
+     */
+    public List<QuestionBean> getRandomWrongQuestion(WrongQuestionBean wrongQuestionBean, int c_num, int q_num) {
+        List<QuestionBean> results = new ArrayList<>(c_num + q_num);
+
+        if(wrongQuestionBean.getJudges().size() < q_num | wrongQuestionBean.getChoices().size() < c_num){
+            Log.e("DAO", "getRandomWrongQuestion: 数量异常，请检查方法getRandomWrongQuestion（）" );
+            return results;
+        }
+
+        List<int[]> positions = RollOutUtil.rollOutWrong(c_num, q_num, wrongQuestionBean.getChoices().size(), wrongQuestionBean.getJudges().size());
+        //获得的position要-1
+        int[] cPositions = positions.get(0);
+        int[] jPositions = positions.get(1);
+
+        for (int pos : cPositions) {
+            results.add(wrongQuestionBean.getChoices().get(pos - 1));
+        }
+        for (int pos : jPositions) {
+            results.add(wrongQuestionBean.getJudges().get(pos - 1));
+        }
+        return results;
+    }
+
+    /**
      * 搜索错题,根据数据库id排序
      *
      * @return
      */
     public List<QuestionBean> qureyWrongQuestionByid() {
         SQLiteDatabase database = helper.getWritableDatabase();
-        List<QuestionBean> questionBeans = new ArrayList<>(50);
+        List<QuestionBean> questionBeans = new ArrayList<>(64);
 
         Cursor cursor = database.query("tb_question", null
                 , "hardlevel = ?", new String[]{"usualWrong"}, null, null, null);
         if (cursor.getCount() == 0) {
-            return null;
+            return questionBeans;
         }
         cursor.moveToFirst();
         do {
@@ -209,7 +288,7 @@ public class QuestionDAO {
      *
      * @return
      */
-    //todo:
+
     public List<QuestionBean> qureyWrongQuestionByWrongTimes() {
         List<QuestionBean> questionBeans = new ArrayList<>(50);
         SQLiteDatabase database = helper.getWritableDatabase();
@@ -228,11 +307,11 @@ public class QuestionDAO {
     /**
      * 删除错题
      */
-    public void deleteWrongQuestion(QuestionBean questionBean){
+    public void deleteWrongQuestion(QuestionBean questionBean) {
         SQLiteDatabase database = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         //在values中添加内容
-        values.put("hardlevel","normal");
+        values.put("hardlevel", "normal");
         //修改条件
         String whereClause = "_id = ?";
         //修改添加参数
@@ -265,14 +344,15 @@ public class QuestionDAO {
 
     /**
      * 删easy-question题
+     *
      * @param
      * @param
      */
-    public void deleteEzQuestion(QuestionBean questionBean){
+    public void deleteEzQuestion(QuestionBean questionBean) {
         SQLiteDatabase database = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         //在values中添加内容
-        values.put("hardlevel","normal");
+        values.put("hardlevel", "normal");
         //修改条件
         String whereClause = "_id = ?";
         //修改添加参数
@@ -285,19 +365,18 @@ public class QuestionDAO {
     /**
      * 清空题库记录
      */
-    public void clearQuestionBank(){
+    public void clearQuestionBank() {
         SQLiteDatabase database = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("testtime",0);
-        values.put("wrongtime",0);
-        values.put("righttime",0);
-        values.put("hardlevel","normal");
-        values.put("lastwrong","undone");
+        values.put("testtime", 0);
+        values.put("wrongtime", 0);
+        values.put("righttime", 0);
+        values.put("hardlevel", "normal");
+        values.put("lastwrong", "undone");
         database.update("tb_question", values, null, null);
         database.close();
         return;
     }
-
 
 
     private void processCursor(Cursor cursor, List<QuestionBean> questionBeans) {

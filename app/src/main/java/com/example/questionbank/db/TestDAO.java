@@ -46,6 +46,7 @@ public class TestDAO {
      */
     public int getTodayRecord(){
         SQLiteDatabase db = helper.getReadableDatabase();
+        helper.onUpgrade(db,1,2);
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
         String datestr = sdf.format(date);
