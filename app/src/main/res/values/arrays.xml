@@ -4,6 +4,10 @@
         <item>默认排序(根据ID)</item>
         <item>根据错题次数排序</item>
     </string-array>
+    <string-array name="all_question_sort">
+        <item>默认排序(根据ID)</item>
+        <item>根据做题次数排序</item>
+    </string-array>
 
 
 </resources>

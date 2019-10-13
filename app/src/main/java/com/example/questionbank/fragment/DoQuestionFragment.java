@@ -227,7 +227,6 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("信息");
             float rightPer = (float) (index+1 - testBean.getWrongQuNum()) / (index+1);
-            Log.d("test","testBean.getWrongQuNum()"+testBean.getWrongQuNum());
             NumberFormat nt = NumberFormat.getPercentInstance();
             nt.setMinimumFractionDigits(2);
             String format = nt.format(rightPer);

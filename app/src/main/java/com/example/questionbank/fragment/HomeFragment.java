@@ -43,8 +43,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         tv_select = view.findViewById(R.id.tv_select);//题库中开始做题
         tv_question_finish_num = view.findViewById(R.id.tv_question_finish_num);
 
-        new TestDAO(getContext()).getTodayRecord().size();
-        tv_question_finish_num.setText(String.valueOf(new TestDAO(getContext()).getTodayRecord().size()));
         tv_question_edit.setOnClickListener(this);
         btn_do_question.setOnClickListener(this);
         tv_title.setText("首页");
@@ -81,5 +79,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         tv_select.setText("单选："+multiple_choice_num+"题，判断："+judge_choice_num+"题  【"+question_distribution+"】");
+        tv_question_finish_num.setText(String.valueOf(new TestDAO(getContext()).getTodayRecord()));
+
     }
 }
