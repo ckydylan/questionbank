@@ -15,7 +15,7 @@ public class QuestionBean implements Serializable {
     int testtime;
     int wrongtime;
     int righttime;
-    String hardlevel;
+    String hardlevel;//"usualWrong" or "ez" or "normal"
     String lastwrong;//“true” or “false” or “undone”
     int answerStatus;
 
