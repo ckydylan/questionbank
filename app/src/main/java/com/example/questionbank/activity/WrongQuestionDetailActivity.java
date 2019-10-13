@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.example.questionbank.R;
 import com.example.questionbank.bean.QuestionBean;
+import com.example.questionbank.utils.ImmersiveStatusBarSettings;
 
 /**
  * @author cky
@@ -29,6 +31,7 @@ public class WrongQuestionDetailActivity extends Activity {
     }
 
     private void initView(){
+        new ImmersiveStatusBarSettings().settingStatusBar(this);
         tv_question_type = findViewById(R.id.tv_question_type);
         tv_question_id = findViewById(R.id.tv_question_id);
         tv_question = findViewById(R.id.tv_question);
@@ -41,15 +44,23 @@ public class WrongQuestionDetailActivity extends Activity {
         setRadioButtonBG();
 
         QuestionBean questionBean = (QuestionBean) getIntent().getSerializableExtra("wrong_question");
-        Log.d("questionBean",questionBean.toString());
         tv_question_id.setText(String.valueOf(questionBean.getId()));
         tv_question.setText(questionBean.getQuestion());
-        tv_question_type.setText(questionBean.getType());
         tv_answer.setText(questionBean.getAnswer());
-        rb_a.setText(questionBean.getSelect_A());
-        rb_b.setText(questionBean.getSelect_B());
-        rb_c.setText(questionBean.getSelect_C());
-        rb_d.setText(questionBean.getSelect_D());
+        if ("choice".equals(questionBean.getType())){
+            tv_question_type.setText("选择");
+            rb_a.setText(questionBean.getSelect_A());
+            rb_b.setText(questionBean.getSelect_B());
+            rb_c.setText(questionBean.getSelect_C());
+            rb_d.setText(questionBean.getSelect_D());
+        }else if ("judge".equals(questionBean.getType())){
+            tv_question_type.setText("判断");
+            rb_a.setVisibility(View.INVISIBLE);
+            rb_b.setVisibility(View.INVISIBLE);
+            rb_c.setVisibility(View.INVISIBLE);
+            rb_d.setVisibility(View.INVISIBLE);
+        }
+
 
     }
 

@@ -48,7 +48,7 @@ public class WrongQuestionAdapter extends RecyclerView.Adapter<WrongQuestionAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         QuestionBean questionBean = wrongQuestionList.get(position);
-        holder.tv_wrong_question_title.setText(questionBean.getId()+"、"+questionBean.getQuestion());
+        holder.tv_wrong_question_title.setText(questionBean.getQuestion());
 
         //删除功能
         holder.iv_message_delete.setOnClickListener(v -> {

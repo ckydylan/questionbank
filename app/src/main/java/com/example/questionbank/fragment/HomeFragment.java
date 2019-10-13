@@ -70,13 +70,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             question_distribution = data.getStringExtra("question_distribution");
             multiple_choice_num = data.getStringExtra("multiple_choice_num");
             judge_choice_num = data.getStringExtra("judge_choice_num");
-            Log.d("multiple_choice_num",multiple_choice_num+">>"+judge_choice_num);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        tv_select.setText("单选："+judge_choice_num+"题，判断："+multiple_choice_num+"题  【"+question_distribution+"】");
+        tv_select.setText("单选："+multiple_choice_num+"题，判断："+judge_choice_num+"题  【"+question_distribution+"】");
     }
 }
