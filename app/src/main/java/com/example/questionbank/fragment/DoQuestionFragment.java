@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.bean.QuestionBean;
+import com.example.questionbank.bean.Recoder;
 import com.example.questionbank.bean.TestBean;
 import com.example.questionbank.db.QuestionDAO;
 import com.example.questionbank.db.TestDAO;
@@ -32,8 +33,11 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author cky
@@ -50,20 +54,18 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     TextView tv_question_type, tv_question;
     RadioGroup rg_select;
     RadioButton rb_a, rb_b, rb_c, rb_d;
-    CheckBox cb_a,cb_b,cb_c,cb_d;
+    CheckBox cb_a, cb_b, cb_c, cb_d;
     ConstraintLayout cl_answer;
-    Button btn_finish_question,btn_make_sure;
+    Button btn_finish_question, btn_make_sure;
     boolean flag = false;
     TestBean testBean;
     StringBuffer sb;
-
-
+    public static Map<Integer,Recoder> recoders = new HashMap<>(128);
 
 
     public DoQuestionFragment(int index) {
         Log.d("index", index + "");
         this.index = index;
-
     }
 
     @Nullable
@@ -78,8 +80,8 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         super.onViewCreated(view, savedInstanceState);
         questionBeanList = ((DoQuestionActivity) getActivity()).getQuestionBeanList();
         questionBean = ((DoQuestionActivity) getActivity()).getQuestionBeanList().get(index);
-        testBean =((DoQuestionActivity) getActivity()).getTestBean();
-        testBean.setqNum(index+1);
+        testBean = ((DoQuestionActivity) getActivity()).getTestBean();
+        testBean.setqNum(index + 1);
         initView(view);
     }
 
@@ -138,7 +140,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             rb_b.setText("F");
             rb_c.setVisibility(View.INVISIBLE);
             rb_d.setVisibility(View.INVISIBLE);
-        }else if ("multiple".equals(questionBean.getType())){
+        } else if ("multiple".equals(questionBean.getType())) {
             ll_multiple.setVisibility(View.VISIBLE);
             rg_select.setVisibility(View.INVISIBLE);
             tv_question_type.setText("多选题");
@@ -204,8 +206,8 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             questionBeanList.get(index).setTesttime(historyTime + 1);
             //答案不正确
             if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
-                testBean.setWrongQuNum(testBean.getWrongQuNum()+1);
-                Log.d("wrongNumb",testBean.getWrongQuNum()+"");
+                testBean.setWrongQuNum(testBean.getWrongQuNum() + 1);
+                Log.d("wrongNumb", testBean.getWrongQuNum() + "");
                 tv_person_select.setTextColor(Color.RED);
                 questionBeanList.get(index).setAnswerStatus(0);
                 int historyTimes = questionBeanList.get(index).getWrongtime();
@@ -213,7 +215,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 questionBeanList.get(index).setHardlevel("usualWrong");
                 questionBeanList.get(index).setLastwrong("false");
 
-                if (tv_set_ez.getText().toString().equals("熟练")){
+                if (tv_set_ez.getText().toString().equals("熟练")) {
                     tv_set_ez.setText("您已做错");
                     tv_set_ez.setTextColor(Color.RED);
                     tv_set_ez.setBackgroundResource(R.color.cccccc);
@@ -231,48 +233,47 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         }
     }
 
-
     /**
      * 选择后显示多选题答案
-     *
      *
      * @param personSelect 人选择的答案
      */
     private void showMulAnswer(String personSelect) {
-            cl_answer.setVisibility(View.VISIBLE);
-            String answer = questionBean.getAnswer();
-            tv_answer.setText(answer);
-            tv_person_select.setText(personSelect);
-            int historyTime = questionBeanList.get(index).getTesttime();
-            questionBeanList.get(index).setTesttime(historyTime + 1);
-            //答案不正确
-            if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
-                testBean.setWrongQuNum(testBean.getWrongQuNum()+1);
-                Log.d("wrongNumb",testBean.getWrongQuNum()+"");
-                tv_person_select.setTextColor(Color.RED);
-                questionBeanList.get(index).setAnswerStatus(0);
-                int historyTimes = questionBeanList.get(index).getWrongtime();
-                questionBeanList.get(index).setWrongtime(historyTimes + 1);
-                questionBeanList.get(index).setHardlevel("usualWrong");
-                questionBeanList.get(index).setLastwrong("false");
+        cl_answer.setVisibility(View.VISIBLE);
+        String answer = questionBean.getAnswer();
+        tv_answer.setText(answer);
+        tv_person_select.setText(personSelect);
+        int historyTime = questionBeanList.get(index).getTesttime();
+        questionBeanList.get(index).setTesttime(historyTime + 1);
+        //答案不正确
+        if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
+            testBean.setWrongQuNum(testBean.getWrongQuNum() + 1);
+            Log.d("wrongNumb", testBean.getWrongQuNum() + "");
+            tv_person_select.setTextColor(Color.RED);
+            questionBeanList.get(index).setAnswerStatus(0);
+            int historyTimes = questionBeanList.get(index).getWrongtime();
+            questionBeanList.get(index).setWrongtime(historyTimes + 1);
+            questionBeanList.get(index).setHardlevel("usualWrong");
+            questionBeanList.get(index).setLastwrong("false");
 
-                if (tv_set_ez.getText().toString().equals("熟练")){
-                    tv_set_ez.setText("您已做错");
-                    tv_set_ez.setTextColor(Color.RED);
-                    tv_set_ez.setBackgroundResource(R.color.cccccc);
-                    questionBeanList.get(index).setHardlevel("normal");
-                    tv_set_ez.setClickable(false);
-                }
-            } else {
-                //答案正确
-                questionBeanList.get(index).setAnswerStatus(1);
-                tv_person_select.setTextColor(Color.parseColor("#4664E6"));
-                int historyTimes = questionBeanList.get(index).getRighttime();
-                questionBeanList.get(index).setRighttime(historyTimes + 1);
-                questionBeanList.get(index).setLastwrong("true");
+            if (tv_set_ez.getText().toString().equals("熟练")) {
+                tv_set_ez.setText("您已做错");
+                tv_set_ez.setTextColor(Color.RED);
+                tv_set_ez.setBackgroundResource(R.color.cccccc);
+                questionBeanList.get(index).setHardlevel("normal");
+                tv_set_ez.setClickable(false);
             }
-
+        } else {
+            //答案正确
+            questionBeanList.get(index).setAnswerStatus(1);
+            tv_person_select.setTextColor(Color.parseColor("#4664E6"));
+            int historyTimes = questionBeanList.get(index).getRighttime();
+            questionBeanList.get(index).setRighttime(historyTimes + 1);
+            questionBeanList.get(index).setLastwrong("true");
+        }
+        rememberRecoder(index,new Recoder(index,answer,personSelect));
     }
+
     /**
      * 设置选择之后不可再选择
      */
@@ -281,6 +282,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         rb_b.setClickable(false);
         rb_c.setClickable(false);
         rb_d.setClickable(false);
+
     }
 
     /**
@@ -297,11 +299,11 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         if (getActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("信息");
-            float rightPer = (float) (index+1 - testBean.getWrongQuNum()) / (index+1);
+            float rightPer = (float) (index + 1 - testBean.getWrongQuNum()) / (index + 1);
             NumberFormat nt = NumberFormat.getPercentInstance();
             nt.setMinimumFractionDigits(2);
             String format = nt.format(rightPer);
-            builder.setMessage("已做:" + (index+1) + "条\n\t错误:" + (testBean.getWrongQuNum()) + "条" + "\n\t" + "正确率：" + format);
+            builder.setMessage("已做:" + (index + 1) + "条\n\t错误:" + (testBean.getWrongQuNum()) + "条" + "\n\t" + "正确率：" + format);
             builder.setPositiveButton("是", (dialog, which) -> getActivity().finish());
             builder.show();
         }
@@ -338,7 +340,22 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     @Override
     public void onResume() {
         super.onResume();
-
+        Recoder recoder = recoders.get(index);
+        if(recoder != null){
+            Log.e("onResume:", "onResume: "+ recoder.getMyanswer());
+            //showMulAnswer(recoder.getMyanswer());
+            cl_answer.setVisibility(View.VISIBLE);
+            tv_answer.setText(recoder.getAnswer());
+            tv_person_select.setText(recoder.getMyanswer());
+            //答案不正确
+            if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
+                tv_person_select.setTextColor(Color.RED);
+            } else {
+                //答案正确
+                tv_person_select.setTextColor(Color.parseColor("#4664E6"));
+            }
+            btn_make_sure.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -386,30 +403,38 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 cb_b.setClickable(false);
                 cb_c.setClickable(false);
                 cb_d.setClickable(false);
-                btn_make_sure.setClickable(false);
-                if (cb_a.isChecked()){
-                    Log.d("a",cb_a.isChecked()+"");
+                btn_make_sure.setVisibility(View.GONE);
+                if (cb_a.isChecked()) {
+                    Log.d("a", cb_a.isChecked() + "");
                     sb.append("A");
                 }
-                if (cb_b.isChecked()){
-                    Log.d("b",cb_b.isChecked()+"");
+                if (cb_b.isChecked()) {
+                    Log.d("b", cb_b.isChecked() + "");
 
                     sb.append("B");
                 }
-                if (cb_c.isChecked()){
-                    Log.d("c",cb_c.isChecked()+"");
+                if (cb_c.isChecked()) {
+                    Log.d("c", cb_c.isChecked() + "");
 
                     sb.append("C");
                 }
-                if (cb_d.isChecked()){
-                    Log.d("d",cb_d.isChecked()+"");
+                if (cb_d.isChecked()) {
+                    Log.d("d", cb_d.isChecked() + "");
 
                     sb.append("D");
                 }
                 showMulAnswer(sb.toString());
 
-
                 break;
         }
     }
+
+
+    //todo:try by zq
+    private void rememberRecoder(Integer index,Recoder recoder){
+        Log.e("onResume", "rememberRecoder: >>>>>" );
+        recoders.put(index,recoder);
+        Log.e("onResume", "rememberRecoder: >>>>>" );
+    }
+
 }
