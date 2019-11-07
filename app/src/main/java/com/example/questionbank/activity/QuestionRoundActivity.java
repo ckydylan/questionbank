@@ -22,7 +22,7 @@ import com.example.questionbank.utils.ImmersiveStatusBarSettings;
  */
 public class QuestionRoundActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
     TextView tv_title;
-    EditText et_multiple_choice_num,et_judge_choice_num;
+    EditText et_multiple_choice_num;//,et_judge_choice_num;
     RadioGroup rg_question_distribution;
     RadioButton rb_random,rb_in_wrong,rb_no_proficiency,rb_only_new;
     Button btn_save_question_round;
@@ -40,7 +40,7 @@ public class QuestionRoundActivity extends Activity implements RadioGroup.OnChec
         new ImmersiveStatusBarSettings().settingStatusBar(this);
         tv_title = findViewById(R.id.tv_title);
         et_multiple_choice_num = findViewById(R.id.et_multiple_choice_num);
-        et_judge_choice_num = findViewById(R.id.et_judge_choice_num);
+//        et_judge_choice_num = findViewById(R.id.et_judge_choice_num);
         btn_save_question_round = findViewById(R.id.btn_save_question_round);
         rg_question_distribution = findViewById(R.id.rg_question_distribution);
         rb_random = findViewById(R.id.rb_random);
@@ -55,11 +55,11 @@ public class QuestionRoundActivity extends Activity implements RadioGroup.OnChec
         rg_question_distribution.setOnCheckedChangeListener(this);
         btn_save_question_round.setOnClickListener(v->{
             multiple_choice_num = et_multiple_choice_num.getText().toString();
-            judge_choice_num = et_judge_choice_num.getText().toString();
+//            judge_choice_num = et_judge_choice_num.getText().toString();
             Intent intent = new Intent();
             intent.putExtra("question_distribution",question_distribution);
             intent.putExtra("multiple_choice_num",multiple_choice_num);
-            intent.putExtra("judge_choice_num",judge_choice_num);
+            intent.putExtra("judge_choice_num","0");
             setResult(10,intent);
             finish();
         });

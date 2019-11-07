@@ -206,7 +206,7 @@ public class QuestionDAO {
 
 
         Cursor cursor = database.query("iot_question", null
-                , sb, qnum_str, null, null, "RANDOM()", String.valueOf(qnums.length));
+                , null, null, null, null, "RANDOM()", String.valueOf(qnums.length));
 
         List<QuestionBean> questionBeans = new ArrayList<>(100);
         cursor.moveToFirst();

@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Intent intent1 = new Intent(new Intent(getContext(), DoQuestionActivity.class));
                 intent1.putExtra("question_distribution",question_distribution);
                 intent1.putExtra("multiple_choice_num",multiple_choice_num);
-                intent1.putExtra("judge_choice_num",judge_choice_num);
+                intent1.putExtra("judge_choice_num","0");
                 startActivity(intent1);
                 break;
         }
@@ -78,7 +78,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        tv_select.setText("单选："+multiple_choice_num+"题，判断："+judge_choice_num+"题  【"+question_distribution+"】");
+//        tv_select.setText("单选："+multiple_choice_num+"题，判断："+judge_choice_num+"题  【"+question_distribution+"】");
+        tv_select.setText("总题数："+multiple_choice_num+"题  【"+question_distribution+"】");
         tv_question_finish_num.setText(String.valueOf(new TestDAO(getContext()).getTodayRecord()));
 
     }

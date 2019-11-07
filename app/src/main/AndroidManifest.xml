@@ -4,18 +4,19 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/logo"
+        android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/logo"
+        android:roundIcon="@mipmap/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.LaunchViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.MainActivity" android:launchMode="singleTop"/>
         <activity android:name=".activity.QuestionRoundActivity" android:launchMode="singleTop"/>
         <activity android:name=".activity.DoQuestionActivity" android:launchMode="singleTop"/>
         <activity android:name=".activity.WrongQuestionCollectionActivity" android:launchMode="singleTop"/>
