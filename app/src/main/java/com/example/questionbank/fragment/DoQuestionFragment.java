@@ -282,7 +282,16 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         rb_b.setClickable(false);
         rb_c.setClickable(false);
         rb_d.setClickable(false);
+    }
 
+    /**
+     * 设置选择之后不可再选择
+     */
+    private void setCheckBoxClickableFalse() {
+        cb_a.setClickable(false);
+        cb_b.setClickable(false);
+        cb_c.setClickable(false);
+        cb_d.setClickable(false);
     }
 
     /**
@@ -330,7 +339,6 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 personSelect = "F";
             }
         }
-
         if (checkedId != 0) {
             setClickableFalse();
         }
@@ -342,6 +350,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         super.onResume();
         Recoder recoder = recoders.get(index);
         if(recoder != null){
+            setCheckBoxClickableFalse();
             Log.e("onResume:", "onResume: "+ recoder.getMyanswer());
             //showMulAnswer(recoder.getMyanswer());
             cl_answer.setVisibility(View.VISIBLE);
