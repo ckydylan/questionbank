@@ -29,7 +29,7 @@ public class QuestionDAO {
 
     public void addQuestion(ArrayList<QuestionBean> list) {
         SQLiteDatabase database = helper.getWritableDatabase();
-        String sql = "insert into tb_question(question,type,select_A,select_B,select_C,select_D,answer) values(?,?,?,?,?,?,?)";
+        String sql = "insert into iot_question(question,type,select_A,select_B,select_C,select_D,answer) values(?,?,?,?,?,?,?)";
         SQLiteStatement stat = database.compileStatement(sql);
         //database
         for (QuestionBean qb : list) {
@@ -49,14 +49,14 @@ public class QuestionDAO {
             contentValues.put("select_D", qb.getSelect_D());
             contentValues.put("type", qb.getType());
             contentValues.put("answer", qb.getAnswer());
-            database.insert("tb_question", null, contentValues);
+            database.insert("iot_question", null, contentValues);
         }
         database.close();
     }
 
     public int qureyQnum() {
         SQLiteDatabase database = helper.getWritableDatabase();
-        Cursor cursor = database.query("tb_question", new String[]{"_id"}, null, null, null, null, "_id DESC");
+        Cursor cursor = database.query("iot_question", new String[]{"_id"}, null, null, null, null, "_id DESC");
         cursor.moveToFirst();
         int id = 0;
         try {
@@ -88,7 +88,7 @@ public class QuestionDAO {
         String[] whereArgs = {String.valueOf(questionBean.getId())};
         //修改
         //int x =
-        database.update("tb_question", values, whereClause, whereArgs);
+        database.update("iot_question", values, whereClause, whereArgs);
         //database.close();
         return;
     }
@@ -100,7 +100,7 @@ public class QuestionDAO {
      */
     public List<QuestionBean> qureyAllQuestionByTestTimes() {
         SQLiteDatabase database = helper.getReadableDatabase();
-        Cursor cursor = database.query("tb_question", null
+        Cursor cursor = database.query("iot_question", null
                 , null, null, null, null, "testtime asc");
 
         List<QuestionBean> questionBeans = new ArrayList<>(2000);
@@ -123,7 +123,7 @@ public class QuestionDAO {
      */
     public List<QuestionBean> qureyAllQuestionById() {
         SQLiteDatabase database = helper.getReadableDatabase();
-        Cursor cursor = database.query("tb_question", null
+        Cursor cursor = database.query("iot_question", null
                 , null, null, null, null, "_id asc");
 
         List<QuestionBean> questionBeans = new ArrayList<>(2000);
@@ -146,20 +146,20 @@ public class QuestionDAO {
      */
     public int qureyUnDoneQuentstionNum() {
         SQLiteDatabase database = helper.getReadableDatabase();
-        Cursor cursor = database.query("tb_question", null
+        Cursor cursor = database.query("iot_question", null
                 , "testtime = ?", new String[]{"0"}, null, null, null);
         cursor.moveToFirst();
         int n = cursor.getCount();
         return n;
     }
 
-    /**
+    /**old版本
      * 全部随机抽取，从题库中
      *
      * @param qnums
      * @return
      */
-    public List<QuestionBean> qureyQuestion(int[] qnums) {
+    public List<QuestionBean> old_qureyQuestion(int[] qnums) {
         SQLiteDatabase database = helper.getWritableDatabase();
 
         String[] qnum_str = new String[qnums.length];
@@ -173,8 +173,40 @@ public class QuestionDAO {
             qnum_str[i] = String.valueOf(qnums[i]);
         }
         sb.append(")");
-        Cursor cursor = database.query("tb_question", null
+        Cursor cursor = database.query("iot_question", null
                 , sb.toString(), qnum_str, null, null, null);
+
+        List<QuestionBean> questionBeans = new ArrayList<>(100);
+        cursor.moveToFirst();
+        if (cursor.getCount() == 0) {
+            return questionBeans;
+        }
+        do {
+            processCursor(cursor, questionBeans);
+        } while (cursor.moveToNext());
+        cursor.close();
+//
+//        for(QuestionBean qb : questionBeans){
+//            LogUtil.loge(">>>qureyQuestion>>>",qb.toString());
+//        }
+        return questionBeans;
+    }
+
+    /**
+     * 全部随机抽取，从题库中
+     *
+     * @param qnums
+     * @return
+     */
+    public List<QuestionBean> qureyQuestion(int[] qnums) {
+        SQLiteDatabase database = helper.getWritableDatabase();
+
+        String[] qnum_str = {"judge","choice"};
+        String sb = "type in (?,?)";
+
+
+        Cursor cursor = database.query("iot_question", null
+                , sb, qnum_str, null, null, "RANDOM()", String.valueOf(qnums.length));
 
         List<QuestionBean> questionBeans = new ArrayList<>(100);
         cursor.moveToFirst();
@@ -199,7 +231,7 @@ public class QuestionDAO {
         SQLiteDatabase database = helper.getReadableDatabase();
         List<QuestionBean> questionBeans = new ArrayList<>(64);
 
-        Cursor cursor = database.query("tb_question", null
+        Cursor cursor = database.query("iot_question", null
                 , "hardlevel = ?,type = ?", new String[]{"usualWrong", "choice"}, null, null, null);
         if (cursor.getCount() == 0) {
             return questionBeans;
@@ -218,7 +250,7 @@ public class QuestionDAO {
         SQLiteDatabase database = helper.getReadableDatabase();
         List<QuestionBean> questionBeans = new ArrayList<>(64);
 
-        Cursor cursor = database.query("tb_question", null
+        Cursor cursor = database.query("iot_question", null
                 , "hardlevel = ?,type = ?", new String[]{"usualWrong", "judge"}, null, null, null);
         if (cursor.getCount() == 0) {
             return questionBeans;
@@ -271,7 +303,7 @@ public class QuestionDAO {
         SQLiteDatabase database = helper.getWritableDatabase();
         List<QuestionBean> questionBeans = new ArrayList<>(64);
 
-        Cursor cursor = database.query("tb_question", null
+        Cursor cursor = database.query("iot_question", null
                 , "hardlevel = ?", new String[]{"usualWrong"}, null, null, null);
         if (cursor.getCount() == 0) {
             return questionBeans;
@@ -292,7 +324,7 @@ public class QuestionDAO {
     public List<QuestionBean> qureyWrongQuestionByWrongTimes() {
         List<QuestionBean> questionBeans = new ArrayList<>(50);
         SQLiteDatabase database = helper.getWritableDatabase();
-        Cursor cursor = database.query("tb_question", null
+        Cursor cursor = database.query("iot_question", null
                 , "hardlevel = ?", new String[]{"usualWrong"}, null, null, "wrongtime desc");
         if (cursor.getCount() == 0) {
             return null;
@@ -316,7 +348,7 @@ public class QuestionDAO {
         String whereClause = "_id = ?";
         //修改添加参数
         String[] whereArgs = {String.valueOf(questionBean.getId())};
-        database.update("tb_question", values, whereClause, whereArgs);
+        database.update("iot_question", values, whereClause, whereArgs);
         //database.close();
         return;
     }
@@ -330,7 +362,7 @@ public class QuestionDAO {
         SQLiteDatabase database = helper.getWritableDatabase();
         List<QuestionBean> questionBeans = new ArrayList<>(50);
 
-        Cursor cursor = database.query("tb_question", null
+        Cursor cursor = database.query("iot_question", null
                 , "hardlevel = ?", new String[]{"ez"}, null, null, null);
         if (cursor.getCount() == 0) {
             return null;
@@ -357,7 +389,7 @@ public class QuestionDAO {
         String whereClause = "_id = ?";
         //修改添加参数
         String[] whereArgs = {String.valueOf(questionBean.getId())};
-        database.update("tb_question", values, whereClause, whereArgs);
+        database.update("iot_question", values, whereClause, whereArgs);
         //database.close();
         return;
     }
@@ -373,7 +405,7 @@ public class QuestionDAO {
         values.put("righttime", 0);
         values.put("hardlevel", "normal");
         values.put("lastwrong", "undone");
-        database.update("tb_question", values, null, null);
+        database.update("iot_question", values, null, null);
         database.close();
         return;
     }

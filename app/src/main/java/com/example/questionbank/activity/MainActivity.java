@@ -1,23 +1,23 @@
 package com.example.questionbank.activity;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.example.questionbank.R;
+import com.example.questionbank.bean.QuestionBean;
 import com.example.questionbank.db.QuestionDAO;
 import com.example.questionbank.fragment.HomeFragment;
 import com.example.questionbank.fragment.QuestionFragment;
 import com.example.questionbank.fragment.SettingFragment;
 import com.example.questionbank.utils.AssertUtil;
 import com.example.questionbank.utils.ImmersiveStatusBarSettings;
-import com.example.questionbank.utils.RegularUtil;
+import com.example.questionbank.utils.RegularUtil2;
 import com.example.questionbank.view.BottomBar;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +29,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView(){
+//todo:delete--测试regex
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    ArrayList<QuestionBean> list =  RegularUtil2.processQuestion(MainActivity.this);
+//                    QuestionDAO questionDAO = new QuestionDAO(MainActivity.this);
+//                    questionDAO.addQuestion(list);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
 
         new Thread(new Runnable() {
             @Override
@@ -54,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                         R.mipmap.setting_before,
                         R.mipmap.setting_after)
                 .build();
-
+//        Log.e("new QuestionDAO(th", "initView: "+ new QuestionDAO(this).qureyAllQuestionByTestTimes().size());
 //        if(new QuestionDAO(this).qureyQnum() < 2000){
 //            try {
 //                new QuestionDAO(this).addQuestion(RegularUtil.processQuestion(this));
