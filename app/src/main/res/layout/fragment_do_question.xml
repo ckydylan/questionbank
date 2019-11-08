@@ -150,9 +150,13 @@
 
         <Button
             android:id="@+id/btn_make_sure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:text="确认"
+            android:background="@drawable/btn_do_question_bg"
+            android:textColor="#ffffff"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="end"
             />
     </LinearLayout>
 

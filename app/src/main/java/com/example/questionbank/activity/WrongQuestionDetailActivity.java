@@ -61,6 +61,11 @@ public class WrongQuestionDetailActivity extends Activity {
             rb_b.setVisibility(View.INVISIBLE);
             rb_c.setVisibility(View.INVISIBLE);
             rb_d.setVisibility(View.INVISIBLE);
+        }else if ("multiple".equals(questionBean.getType())){
+            rb_a.setText(questionBean.getSelect_A());
+            rb_b.setText(questionBean.getSelect_B());
+            rb_c.setText(questionBean.getSelect_C());
+            rb_d.setText(questionBean.getSelect_D());
         }
 
 

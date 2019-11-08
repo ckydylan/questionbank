@@ -87,6 +87,7 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         vp_question.setCurrentItem(0);
         questionAdapter = new QuestionAdapter(getSupportFragmentManager(),questionBeanList);
         vp_question.setAdapter(questionAdapter);
+        vp_question.setOffscreenPageLimit(questionBeanList.size());
         vp_question.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -105,7 +106,6 @@ public class DoQuestionActivity extends FragmentActivity implements View.OnClick
         });
 
     }
-
     private void alert(){
         AlertDialog.Builder builder  = new AlertDialog.Builder(DoQuestionActivity.this);
         builder.setTitle("警告" ) ;

@@ -86,6 +86,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     }
 
     private void initView(View view) {
+        Log.e("init","fragment加载了");
         btn_make_sure = view.findViewById(R.id.btn_make_sure);
         ll_multiple = view.findViewById(R.id.ll_multiple);
         tv_question_type = view.findViewById(R.id.tv_question_type);
@@ -157,10 +158,10 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
      */
     private void setEZOrNormal() {
         if ("normal".equals(questionBeanList.get(index).getHardlevel())) {
-            tv_set_ez.setText("设置为简单题");
+            tv_set_ez.setText("设置为熟练题");
             tv_set_ez.setBackgroundResource(R.color.cccccc);
         } else if ("ez".equals(questionBeanList.get(index).getHardlevel())) {
-            tv_set_ez.setText("简单");
+            tv_set_ez.setText("熟练");
             tv_set_ez.setBackgroundResource(R.drawable.btn_do_question_bg);
         }
     }
@@ -230,6 +231,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 questionBeanList.get(index).setRighttime(historyTimes + 1);
                 questionBeanList.get(index).setLastwrong("true");
             }
+//            rememberRecoder(index,new Recoder(index,answer,personSelect));
         }
     }
 
@@ -396,6 +398,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 if (!isFinish) {
                     Toast.makeText(getContext(), "您未做完，请仔细检查", Toast.LENGTH_SHORT).show();
                 } else {
+                    recoders = new HashMap<>();
                     for (QuestionBean question : questionBeanList) {
                         new QuestionDAO(getActivity()).updateQuestion(question);
                     }
@@ -432,8 +435,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
 
                     sb.append("D");
                 }
-                showMulAnswer(sb.toString());
-
+                showAnswer(1,sb.toString());
                 break;
         }
     }
