@@ -364,7 +364,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         Recoder recoder = recoders.get(index);
         if(recoder != null){
             setCheckBoxClickableFalse();
-            Log.e("onResume:", "onResume: "+ recoder.getMyanswer());
+//            Log.e("onResume:", "onResume: "+ recoder.getMyanswer());
             //showMulAnswer(recoder.getMyanswer());
             cl_answer.setVisibility(View.VISIBLE);
             tv_answer.setText(recoder.getAnswer());
@@ -380,7 +380,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             btn_make_sure.setVisibility(View.GONE);
 
         }
-        Log.e("onResume:", "onResume:num>>>>" +  recoders.size());
+//        Log.e("onResume:", "onResume:num>>>>" +  recoders.size());
     }
 
     @Override
