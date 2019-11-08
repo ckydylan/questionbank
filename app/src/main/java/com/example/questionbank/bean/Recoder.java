@@ -4,6 +4,7 @@ public class Recoder {
     int index;
     String answer;
     String myanswer;
+    boolean firstIn = true;
 
     public Recoder(int index, String answer, String myanswer) {
         this.index = index;
@@ -33,5 +34,13 @@ public class Recoder {
 
     public void setMyanswer(String myanswer) {
         this.myanswer = myanswer;
+    }
+
+    public boolean isFirstIn() {
+        return firstIn;
+    }
+
+    public void setFirstIn(boolean firstIn) {
+        this.firstIn = firstIn;
     }
 }

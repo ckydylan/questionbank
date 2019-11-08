@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.questionbank.R;
 import com.example.questionbank.db.QuestionDAO;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 /**
  * @author cky
@@ -58,9 +60,12 @@ public class SettingFragment extends Fragment {
 
                         }
                     });
-
                     dialog.show();
                 }
         );
+        //加载广告
+        AdView mAdView = (AdView) view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 }

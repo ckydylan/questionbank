@@ -60,7 +60,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
     boolean flag = false;
     TestBean testBean;
     StringBuffer sb;
-    public static Map<Integer,Recoder> recoders = new HashMap<>(128);
+    public static Map<Integer,Recoder> recoders;
 
 
     public DoQuestionFragment(int index) {
@@ -150,6 +150,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             cb_b.setText(questionBean.getSelect_B());
             cb_c.setText(questionBean.getSelect_C());
             cb_d.setText(questionBean.getSelect_D());
+
         }
     }
 
@@ -205,17 +206,25 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             tv_person_select.setText(personSelect);
             int historyTime = questionBeanList.get(index).getTesttime();
             questionBeanList.get(index).setTesttime(historyTime + 1);
+
+//zq:存入答题记录
+            if(recoders.get(index) == null){
+                recoders.put(index,new Recoder(index,answer,personSelect));
+            }
             //答案不正确
             if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
-                testBean.setWrongQuNum(testBean.getWrongQuNum() + 1);
-                Log.d("wrongNumb", testBean.getWrongQuNum() + "");
+                //Log.d("wrongNumb", testBean.getWrongQuNum() + "");
                 tv_person_select.setTextColor(Color.RED);
                 questionBeanList.get(index).setAnswerStatus(0);
                 int historyTimes = questionBeanList.get(index).getWrongtime();
                 questionBeanList.get(index).setWrongtime(historyTimes + 1);
                 questionBeanList.get(index).setHardlevel("usualWrong");
                 questionBeanList.get(index).setLastwrong("false");
-
+                //zq:修复bug
+                if(recoders.get(index).isFirstIn()){
+                    testBean.setWrongQuNum(testBean.getWrongQuNum() + 1);
+                    recoders.get(index).setFirstIn(false);
+                }
                 if (tv_set_ez.getText().toString().equals("熟练")) {
                     tv_set_ez.setText("您已做错");
                     tv_set_ez.setTextColor(Color.RED);
@@ -231,7 +240,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
                 questionBeanList.get(index).setRighttime(historyTimes + 1);
                 questionBeanList.get(index).setLastwrong("true");
             }
-//            rememberRecoder(index,new Recoder(index,answer,personSelect));
+            //rememberRecoder(index,new Recoder(index,answer,personSelect));
         }
     }
 
@@ -249,7 +258,8 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
         questionBeanList.get(index).setTesttime(historyTime + 1);
         //答案不正确
         if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
-            testBean.setWrongQuNum(testBean.getWrongQuNum() + 1);
+            //testBean.setWrongQuNum(testBean.getWrongQuNum() + 1);
+
             Log.d("wrongNumb", testBean.getWrongQuNum() + "");
             tv_person_select.setTextColor(Color.RED);
             questionBeanList.get(index).setAnswerStatus(0);
@@ -273,7 +283,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             questionBeanList.get(index).setRighttime(historyTimes + 1);
             questionBeanList.get(index).setLastwrong("true");
         }
-        rememberRecoder(index,new Recoder(index,answer,personSelect));
+        //rememberRecoder(index,new Recoder(index,answer,personSelect));
     }
 
     /**
@@ -345,6 +355,7 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             setClickableFalse();
         }
         showAnswer(checkedId, personSelect);
+
     }
 
     @Override
@@ -361,12 +372,15 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
             //答案不正确
             if (!tv_person_select.getText().toString().equals(tv_answer.getText().toString())) {
                 tv_person_select.setTextColor(Color.RED);
+                //
             } else {
                 //答案正确
                 tv_person_select.setTextColor(Color.parseColor("#4664E6"));
             }
             btn_make_sure.setVisibility(View.GONE);
+
         }
+        Log.e("onResume:", "onResume:num>>>>" +  recoders.size());
     }
 
     @Override
@@ -443,9 +457,9 @@ public class DoQuestionFragment extends Fragment implements RadioGroup.OnChecked
 
     //todo:try by zq
     private void rememberRecoder(Integer index,Recoder recoder){
-        Log.e("onResume", "rememberRecoder: >>>>>" );
+//        Log.e("onResume", "rememberRecoder: >>>>>" );
         recoders.put(index,recoder);
-        Log.e("onResume", "rememberRecoder: >>>>>" );
+//        Log.e("onResume", "rememberRecoder: >>>>>" );
     }
 
 }

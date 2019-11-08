@@ -2,6 +2,7 @@ package com.example.questionbank.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,10 @@ import com.example.questionbank.R;
 import com.example.questionbank.activity.DoQuestionActivity;
 import com.example.questionbank.activity.QuestionRoundActivity;
 import com.example.questionbank.db.TestDAO;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+import java.util.HashMap;
 
 /**
  * @author cky
@@ -56,6 +61,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 startActivityForResult(intent,1);
                 break;
             case R.id.btn_do_question:
+                DoQuestionFragment.recoders = new HashMap<>(128);
                 Intent intent1 = new Intent(new Intent(getContext(), DoQuestionActivity.class));
                 intent1.putExtra("question_distribution",question_distribution);
                 intent1.putExtra("multiple_choice_num",multiple_choice_num);
@@ -83,4 +89,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         tv_question_finish_num.setText(String.valueOf(new TestDAO(getContext()).getTodayRecord()));
 
     }
+
 }

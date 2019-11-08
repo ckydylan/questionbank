@@ -14,6 +14,11 @@ import com.example.questionbank.utils.AssertUtil;
 import com.example.questionbank.utils.ImmersiveStatusBarSettings;
 import com.example.questionbank.utils.RegularUtil2;
 import com.example.questionbank.view.BottomBar;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +72,16 @@ public class MainActivity extends AppCompatActivity {
                         R.mipmap.setting_before,
                         R.mipmap.setting_after)
                 .build();
+
+        //google ads
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
+
+
 //        Log.e("new QuestionDAO(th", "initView: "+ new QuestionDAO(this).qureyAllQuestionByTestTimes().size());
 //        if(new QuestionDAO(this).qureyQnum() < 2000){
 //            try {
